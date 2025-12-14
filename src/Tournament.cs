@@ -1,10 +1,9 @@
 namespace App;
+using System.Collections.Generic;
 
 public class Tournament
 {
-
     public string name;
-    public List<Bracket> brackets;
-    public List<int> tables;
-
+    List<Bracket> brackets;
+    List<int> tables;
 }
