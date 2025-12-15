@@ -2,7 +2,6 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  x:Class="App.App"
  RequestedThemeVariant="Default">
-    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.Styles>
         <FluentTheme />
@@ -10,13 +9,16 @@
     </Application.Styles>
 
     <Application.Resources>
-        <SolidColorBrush x:Key="PrimaryFG">#cfcfcf</SolidColorBrush>
-        <SolidColorBrush x:Key="PrimaryBG">#ffffff</SolidColorBrush>
+        <SolidColorBrush x:Key="PrimaryFG">#E3E3E3</SolidColorBrush>
+        <SolidColorBrush x:Key="SecondaryFG">#456882</SolidColorBrush>
+        <SolidColorBrush x:Key="PrimaryBG">#1B3C53</SolidColorBrush>
+        <SolidColorBrush x:Key="SecondaryBG">#234C6A</SolidColorBrush>
         <LinearGradientBrush x:Key="PrimaryBGGradient" StartPoint="0%,0%" EndPoint="100%,0%">
-            <GradientStop Offset="0" Color="#111214"></GradientStop>
-            <GradientStop Offset="1" Color="#111214"></GradientStop>
+            <GradientStop Offset="0" Color="#1B3C53"></GradientStop>
+            <GradientStop Offset="1" Color="#234C6A"></GradientStop>
         </LinearGradientBrush>
-        <FontFamily x:Key="UbuntuSans">/Assets/Fonts/UbuntuSans#Ubuntu Sans Regular</FontFamily>
+        <FontFamily x:Key="UbuntuSans">/Assets/Fonts/UbuntuSans.ttf#Ubuntu Sans Regular</FontFamily>
+        <FontFamily x:Key="Phosphor">/Assets/Fonts/Phosphor.ttf#P</FontFamily>
 
      </Application.Resources>
 </Application>

@@ -3,9 +3,9 @@ using Avalonia.Interactivity;
 
 namespace App;
 
-public partial class MainWindow : Window
+public partial class MainView : Window
 {
-    public MainWindow()
+    public MainView()
     {
         InitializeComponent();
     }
