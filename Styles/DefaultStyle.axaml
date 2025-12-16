@@ -62,7 +62,7 @@
         <Setter Property="BorderThickness" Value="2"></Setter>
         <Setter Property="CornerRadius" Value="5"></Setter>
         <Setter Property="BorderBrush" Value="{DynamicResource PrimaryFG}"></Setter>
-        <Setter Property="Padding" Value="4 4 0 4"></Setter>
+        <Setter Property="Padding" Value="4 4 0 2"></Setter>
     </Style>
     <Style Selector="TextBlock.AddText">
         <Setter Property="Padding" Value="10 0 10 0"></Setter>

@@ -1,4 +1,5 @@
-using CommunityToolKit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace App.ViewModels;
 

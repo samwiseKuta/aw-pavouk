@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using App.ViewModels;
 
 namespace App;
 
@@ -10,11 +11,9 @@ public partial class MainView : Window
         InitializeComponent();
     }
 
-    public void GreetButton_Click(object sender, RoutedEventArgs e){
+    public void NewTournamentClicked(object sender, RoutedEventArgs e){
 
-        Bracket b = new Bracket().GenerateEmpty(20);
-        var messageControl = this.FindControl<TextBlock>("MessageLabel");
+        (DataContext as MainViewModel)?.HideShowMenu();
 
-        messageControl.Text = $"The bracket: \n{b.ToString()}";
     }
 }
