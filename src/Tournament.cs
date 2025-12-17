@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 public class Tournament
 {
-    public string name;
-    public string location;
+    public required string name;
+    public required string location;
     public DateTime date;
-    List<Bracket> brackets;
-    List<int> tables;
+    List<Bracket>? brackets;
+    List<int>? tables;
 }

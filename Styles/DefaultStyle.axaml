@@ -10,12 +10,22 @@
         <Setter Property="FontSize" Value="40"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource PrimaryFG}"></Setter>
         <Setter Property="Background" Value="{DynamicResource PrimaryBG}"></Setter>
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                <BrushTransition Property="Foreground" Duration="0:0:0.8"/>
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.12"/>
+            </Transitions>
+        </Setter>
     </Style>
-    <Style Selector="TextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource PrimaryFG}"></Setter>
+    <Style Selector="TextBlock.Icon">
+        <Setter Property="FontFamily" Value="{DynamicResource Phosphor}"></Setter>
     </Style>
     <Style Selector="Label.Icon">
         <Setter Property="FontFamily" Value="{DynamicResource Phosphor}"></Setter>
+    </Style>
+    <Style Selector="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryFG}"></Setter>
     </Style>
     <Style Selector="Button /template/ ContentPresenter">
         <Setter Property="Transitions">
@@ -62,15 +72,19 @@
         <Setter Property="BorderThickness" Value="2"></Setter>
         <Setter Property="CornerRadius" Value="5"></Setter>
         <Setter Property="BorderBrush" Value="{DynamicResource PrimaryFG}"></Setter>
-        <Setter Property="Padding" Value="4 4 0 2"></Setter>
+        <Setter Property="Padding" Value="0 -2 -2 -2"></Setter>
+        <Setter Property="Margin" Value="0 0 -0 -1"></Setter>
     </Style>
     <Style Selector="TextBlock.AddText">
-        <Setter Property="Padding" Value="10 0 10 0"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        <Setter Property="Padding" Value="5 0 5 0"></Setter>
     </Style>
-    <Style Selector="Label.Plus">
-        <Setter Property="FontSize" Value="50"></Setter>
-        <Setter Property="Padding" Value="5 12 0 10"></Setter>
-        <Setter Property="TextBlock.Foreground" Value="{DynamicResource PrimaryFG}"></Setter>
+    <Style Selector="TextBlock.Plus">
+        <Setter Property="Padding" Value="3 0 0 0"></Setter>
+        <Setter Property="FontSize" Value="80"></Setter>
+        <Setter Property="TextWrapping" Value="Wrap"></Setter>
+        <Setter Property="Background" Value="Green"></Setter>
+        <Setter Property="TextBlock.Foreground" Value="{DynamicResource SecondaryFG}"></Setter>
         <Setter Property="RenderTransform" Value="rotate(0)"/>
         <Setter Property="Transitions">
             <Transitions>
@@ -81,4 +95,15 @@
     <Style Selector="Label.Plus:pointerover">
         <Setter Property="RenderTransform" Value="rotate(1turn)"></Setter>
     </Style>
+
+    <Style Selector="Grid.AddMenu">
+        <Setter Property="Transitions">
+            <Transitions>
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.4"/>
+                <DoubleTransition Property="Height" Duration="0:0:1.4"/>
+            </Transitions>
+        </Setter>
+        <Setter Property="Background" Value="{DynamicResource SecondaryBG}"/>
+    </Style>
+    
  </Styles>

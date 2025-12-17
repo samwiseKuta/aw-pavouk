@@ -5,7 +5,7 @@ class Bracket
 {
 
 
-    public string name;
+    public required string name;
     public int depth;
     public int count;
     public enum type{
@@ -77,7 +77,7 @@ class Bracket
     {
 
         Queue<Node> queue = new Queue<Node>();
-        queue.Enqueue(this.root);
+        queue.Enqueue(this.root!);
         List<List<Node>> levels = new List<List<Node>>();
         int depth = 0;
         while(true){

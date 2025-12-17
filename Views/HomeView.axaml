@@ -1,0 +1,105 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    xmlns:vm="clr-namespace:ViewModels"
+    x:Class="Views.HomeView"
+    x:DataType="vm:HomeViewModel"
+    >
+                
+    <Grid RowDefinitions="*,auto">
+        <StackPanel>
+            <Grid ColumnDefinitions="2*,auto" Grid.Row="0">
+                <Button 
+                    Classes ="AddButton" 
+                    Click="NewTournamentClicked" 
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    >
+                    <Border Classes="AddBorder" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal" Spacing="0">
+                            <TextBlock Classes="AddText" Text="New tournament"></TextBlock>
+                            <TextBlock Classes="Plus Icon">&#xE3D4;</TextBlock>
+                            <!--<Label Classes="Plus Icon" >&#xE3D6;</Label>-->
+                        </StackPanel>
+                    </Border>
+                </Button>
+                <Border 
+                    Padding="1 0 0 0" 
+                    Grid.Column="1"
+                    Width="600" 
+                    HorizontalAlignment="Right"
+                    Margin="2 0 0 0"
+                    Background=""
+                    >
+                    <Svg Width="200" Path="/Assets/Images/ChatGPT-logo.svg" 
+                        VerticalAlignment="Top"
+                        />
+                </Border>
+            </Grid>
+            <Separator/>
+            <Grid Classes="AddMenu" IsVisible="{Binding ShowAddMenu}" ColumnDefinitions="*,auto">
+                <StackPanel Grid.Column="0">
+                    <Label  Content="Name"></Label>
+                    <TextBox  Watermark="Golem's Hand"></TextBox>
+                    <Label  Content="Location"></Label>
+                    <TextBox  Watermark="Prague"></TextBox>
+                    <Button>
+                        <Label Content="&#xE520; Create"/>
+                    </Button>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <Label  Content="Date"></Label>
+                    <Calendar Width="300" Height="400"></Calendar>
+                </StackPanel>
+                <Separator/>
+            </Grid>
+        </StackPanel>
+        <Grid Grid.Row="1" RowDefinitions="auto,auto">
+            <StackPanel Grid.Row ="0" Orientation="Horizontal">
+                <TextBlock Padding="10 0 0 0" >Tournament History </TextBlock>
+                <Label Classes="Icon">&#xE7B4;</Label>
+            </StackPanel>
+            <Border Grid.Row="1" Padding="30" Background="">
+                <StackPanel Orientation="Horizontal" Spacing="11">
+                    <Button>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Classes="Date">10.10.2025</TextBlock>
+                            <Label>Vanocni Paka</Label>
+                            <TextBlock Classes="Location">Knezice 130</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Classes="Date">10.10.2025</TextBlock>
+                            <Label>Vanocni Paka</Label>
+                            <TextBlock Classes="Location">Knezice 130</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Classes="Date">10.10.2025</TextBlock>
+                            <Label>Vanocni Paka</Label>
+                            <TextBlock Classes="Location">Knezice 130</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Classes="Date">10.10.2025</TextBlock>
+                            <Label>Vanocni Paka</Label>
+                            <TextBlock Classes="Location">Knezice 130</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Classes="Date">10.10.2025</TextBlock>
+                            <Label>Vanocni Paka</Label>
+                            <TextBlock Classes="Location">Knezice 130</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
