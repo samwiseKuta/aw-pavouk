@@ -68,6 +68,10 @@
         <Setter Property="Background" Value="{DynamicResource SecondaryBG}"></Setter>
         <Setter Property="TextBlock.Foreground" Value="{DynamicResource PrimaryFG}"></Setter>
     </Style>
+    <Style Selector="Button.Open">
+        <Setter Property="Background" Value="Orange"></Setter>
+    </Style>
+
     <Style Selector="Border.AddBorder">
         <Setter Property="BorderThickness" Value="2"></Setter>
         <Setter Property="CornerRadius" Value="5"></Setter>
@@ -97,13 +101,47 @@
     </Style>
 
     <Style Selector="Grid.AddMenu">
+        <Setter Property="RenderTransform" Value="translateY(-700px)"/>
+        <Setter Property="Width" Value="0"/>
+        <Setter Property="Height" Value="0"/>
+        
         <Setter Property="Transitions">
             <Transitions>
-                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.4"/>
-                <DoubleTransition Property="Height" Duration="0:0:1.4"/>
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.8"/>
+                <DoubleTransition Property="MaxHeight" Duration="0:0:0.85"/>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.85"/>
             </Transitions>
         </Setter>
         <Setter Property="Background" Value="{DynamicResource SecondaryBG}"/>
     </Style>
-    
+
+    <Style Selector="Grid.AddMenu.IsVisible">
+    <Setter Property="Opacity" Value="1"/>
+    <Setter Property="RenderTransform" Value="translateY(0)"/>
+        <Setter Property="Width" Value="NaN"/>
+        <Setter Property="Height" Value="NaN"/>
+</Style>
+
+
+    <Style Selector="Grid.HistoryBlock">
+        <Setter Property="Transitions">
+            <Transitions>
+                <DoubleTransition Property="Height" Duration="0:0:0.85"/>
+                <DoubleTransition Property="MaxHeight" Duration="0:0:0.85"/>
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="StackPanel.TournamentItem">
+        <Setter Property="MaxWidth" Value="300"/>
+        <Setter Property="MaxHeight" Value="100"/>
+    </Style>
+
+    <Style Selector="Label.FormLabel">
+    </Style>
+    <Style Selector="TextBox.FormInput">
+        <Setter Property="Margin" Value="10 0 10 0"/>
+    </Style>
+
+
  </Styles>

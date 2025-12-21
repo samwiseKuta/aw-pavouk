@@ -1,8 +1,7 @@
 using ViewModels;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
+using System;
 
 namespace Views;
 
@@ -14,7 +13,10 @@ public partial class HomeView : UserControl
     }
     public void NewTournamentClicked(object sender, RoutedEventArgs e){
 
-        (DataContext as HomeViewModel)?.HideShowMenu();
+        (DataContext as HomeViewModel)?.HideShowMenuCommand.Execute(null);
+    }
+
+    public void CreateTournamentClicked(object sender, RoutedEventArgs e){
 
     }
 }

@@ -1,12 +1,16 @@
 <Application xmlns="https://github.com/avaloniaui"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  x:Class="App.App"
+xmlns:local="clr-namespace:App"
  RequestedThemeVariant="Default">
 
     <Application.Styles>
         <FluentTheme />
         <StyleInclude Source="Styles/DefaultStyle.axaml"></StyleInclude>
     </Application.Styles>
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
 
     <Application.Resources>
         <SolidColorBrush x:Key="PrimaryFG">#000000</SolidColorBrush>

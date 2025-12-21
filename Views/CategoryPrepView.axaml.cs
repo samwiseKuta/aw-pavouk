@@ -4,7 +4,7 @@ using ViewModels;
 
 namespace Views;
 
-public partial class CategoryPrepView : Window
+public partial class CategoryPrepView : UserControl
 {
     public CategoryPrepView()
     {
