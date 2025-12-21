@@ -1,4 +1,4 @@
-namespace App;
+namespace Models;
 
 public class Competitor
 {

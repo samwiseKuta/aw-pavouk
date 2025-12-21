@@ -1,81 +1,108 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     xmlns:local="using:App"
     xmlns:vm="clr-namespace:ViewModels"
     xmlns:view="clr-namespace:Views"
     x:Class="Views.HomeView"
     x:DataType="vm:HomeViewModel"
     >
+
     <Grid RowDefinitions="auto,35*">
         <Grid RowDefinitions="auto,auto">
-                <Grid Grid.Row="0" ColumnDefinitions="*,*">
-                    <Button 
+            <Grid Grid.Row="0" ColumnDefinitions="*,*">
+                <Button 
                     Grid.Column="0"
-                        Classes ="AddButton" 
-                        Classes.Open="{Binding ShowAddMenu}"
-                        Click="NewTournamentClicked" 
-                        VerticalAlignment="Top"
-                        HorizontalAlignment="Stretch"
-                        >
-                        <Border Classes="AddBorder" HorizontalAlignment="Left">
-                            <StackPanel Orientation="Horizontal" Spacing="0">
-                                <TextBlock Classes="AddText" Text="New tournament"></TextBlock>
-                                <TextBlock Classes="Plus Icon">&#xE3D4;</TextBlock>
-                            </StackPanel>
-                        </Border>
-                    </Button>
-                    <Border 
-                    Grid.Column="1"
-                        Padding="1 0 0 0" 
-                        Width="600" 
-                        HorizontalAlignment="Right"
-                        Margin="2 0 0 0"
-                        Background=""
-                        >
-                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                            <Label VerticalAlignment="Center" Content="AW-Spider"/>
-                            <Svg Width="200" Path="/Assets/Images/ChatGPT-logo.svg" 
-                                VerticalAlignment="Top"
-                                HorizontalAlignment="Right"
-                                />
-
+                    Classes ="AddButton" 
+                    Classes.Open="{Binding ShowAddMenu}"
+                    Click="NewTournamentClicked" 
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    >
+                    <Border Classes="AddBorder" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal" Spacing="0">
+                            <TextBlock Classes="AddText" Text="New tournament"></TextBlock>
+                            <TextBlock Classes="Plus Icon">&#xE3D4;</TextBlock>
                         </StackPanel>
                     </Border>
-                </Grid>
+                </Button>
+                <Border 
+                    Grid.Column="1"
+                    Padding="1 0 0 0" 
+                    Width="600" 
+                    HorizontalAlignment="Right"
+                    Margin="2 0 0 0"
+                    Background=""
+                    >
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Label VerticalAlignment="Center" Content="AW-Spider"/>
+                        <Svg Width="200" Path="/Assets/Images/ChatGPT-logo.svg" 
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Right"
+                            />
+
+                    </StackPanel>
+                </Border>
+            </Grid>
             <Grid 
                 Grid.Row="1" 
-                Classes.IsVisible="{Binding ShowAddMenu}"
-                IsVisible="{Binding ShowAddMenu}" 
+                Opacity="{Binding ShowAddMenu}" 
                 ColumnDefinitions="*,auto"
                 Classes="AddMenu"
                 >
                 <StackPanel Grid.Column="0">
                     <Label  Classes="FormLabel" Content="Name"/>
-                    <TextBox  Classes="FormInput" Watermark="Golem's Hand"/> 
-                    <Label  Classes="FormLabel" Content="Location"/>
-                    <TextBox  Classes="FormInput" Watermark="Prague"/>
-                    <Button>
+                    <TextBox  Text="{Binding TournamentName}" Classes="FormInput" Watermark="Golem's Hand"/> 
+                    <Label   Classes="FormLabel" Content="Location"/>
+                    <TextBox Text="{Binding TournamentLocation}" Classes="FormInput" Watermark="Prague"/>
+                    <Button Command="{Binding CreateTournamentCommand}">
                         <Label Classes="FormSubmitButton" Content="&#xE520; Create"/>
                     </Button>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <Label  Content="Date of competition"/>
-                    <CalendarDatePicker/>
+                    <CalendarDatePicker SelectedDate="{Binding TournamentDate}"/>
                 </StackPanel>
-                </Grid>
+            </Grid>
             <Separator Margin="0 40 0 0"/>
         </Grid>
-            <Grid Grid.Row="1" RowDefinitions="auto,*" Classes="HistoryBlock">
-                <StackPanel Grid.Row ="0" Orientation="Horizontal">
-                    <TextBlock Padding="28 0 0 0" >Tournament History </TextBlock>
-                    <Label Classes="Icon">&#xE7B4;</Label>
-                </StackPanel>
-                <Border Grid.Row="1" Padding="30" Background="">
-                    <view:TournamentItemView/>
-                </Border>
-            </Grid>
+        <Grid Grid.Row="1" RowDefinitions="auto,*" Classes="HistoryBlock">
+            <StackPanel Grid.Row ="0" Orientation="Horizontal" Background="Red">
+                <TextBlock Padding="28 0 0 0" >Tournament History </TextBlock>
+                <Label Classes="Icon">&#xE7B4;</Label>
+                <Button HorizontalAlignment="Right" Command="{Binding RefreshHistoryCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Refresh"/>
+                        <Label Classes="Icon">&#xE094;</Label>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <Border Grid.Row="1" Padding="30" Background="">
+                <ListBox
+                    ItemsSource="{Binding TournamentHistory}"
+                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled">
+
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel
+                                Orientation="Horizontal"
+                                Spacing="7"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical" Classes="HistoryItem">
+                                <TextBlock Classes="Date" Margin="5 0" Text="{Binding Date}"/>
+                                <Label Content="{Binding Name}"/>
+                                <TextBlock Classes="Location" Margin="5 0" Text="{Binding Location}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
