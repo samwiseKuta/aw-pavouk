@@ -16,6 +16,8 @@ public class Tournament
 
     }
 
-
-
+    public override string? ToString()
+    {
+        return $"{this.Name} | {this.Location} | {this.Date}";
+    }
 }

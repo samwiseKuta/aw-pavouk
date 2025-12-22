@@ -1,30 +1,33 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Models;
-class Bracket
+public class Bracket : IComparable<Bracket>
 {
 
 
-    public required string name;
-    public int depth;
-    public int count;
+    public required string Name {get;set;}
+    public int Depth {get;set;}
+    public int Count {get;set;}
     public enum type{
         SingleElimination,
         DoubleElimination
     }
     public class Node
     {
-        public int number;
-        public Node? left;
-        public Node? right;
+        public Competitor Competitor;
+        public Node? Left {get;set;}
+        public Node? Right {get;set;}
 
-        public Node(int number){
-            this.number = number;
+        public Node(Competitor competitor){
+            this.Competitor = competitor;
+
         }
 
         public override string? ToString()
         {
-            return ""+this.number;
+            return this.Competitor.ToString();
         }
     }
     private Node? root;
@@ -32,7 +35,7 @@ class Bracket
     public Bracket GenerateEmpty(int participantsCount) {
 
         for(int i = 1; i < participantsCount; i++){
-            this.AddLeaf(new Node(i));
+            this.AddLeaf(new Node(new Competitor()));
         }
 
         return this;
@@ -48,8 +51,8 @@ class Bracket
 
         if(this.root is null) {
             this.root = leafNode;
-            this.count = 1;
-            this.depth = 0;
+            this.Count = 1;
+            this.Depth = 0;
             return;
         }
         Queue<Node> queue = new Queue<Node>();
@@ -57,19 +60,19 @@ class Bracket
         
         while(true){
             Node curr = queue.Dequeue();
-            if(curr.left is null){
+            if(curr.Left is null){
 
-                curr.left = leafNode;
+                curr.Left = leafNode;
                 return;
             }
 
-            if(curr.right is null){
-                curr.right = leafNode;
+            if(curr.Right is null){
+                curr.Right = leafNode;
                 return;
             }
 
-            queue.Enqueue(curr.left);
-            queue.Enqueue(curr.right);
+            queue.Enqueue(curr.Left);
+            queue.Enqueue(curr.Right);
         }
     }
 
@@ -88,8 +91,8 @@ class Bracket
             for(int i = 0; i < currentDepthCount; i++){
                 Node curr = queue.Dequeue();
                 levels[depth].Add(curr);
-                if(curr.left is not null) queue.Enqueue(curr.left);
-                if(curr.right is not null) queue.Enqueue(curr.right);
+                if(curr.Left is not null) queue.Enqueue(curr.Left);
+                if(curr.Right is not null) queue.Enqueue(curr.Right);
             }
             depth++;
             
@@ -105,5 +108,13 @@ class Bracket
         }
 
         return value;
+    }
+
+
+    public int CompareTo(Bracket? other)
+    {
+        if(other is null) return -1;
+
+        return other.Name.CompareTo(this.Name);
     }
 }

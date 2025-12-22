@@ -23,7 +23,7 @@
                     >
                     <Border Classes="AddBorder" HorizontalAlignment="Left">
                         <StackPanel Orientation="Horizontal" Spacing="0">
-                            <TextBlock Classes="AddText" Text="New tournament"></TextBlock>
+                            <TextBlock Classes="AddPrompt" Text="Add Tournament"/>
                             <TextBlock Classes="Plus Icon">&#xE3D4;</TextBlock>
                         </StackPanel>
                     </Border>
@@ -83,6 +83,7 @@
                 <ListBox
                     ItemsSource="{Binding TournamentHistory}"
                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                    SelectedItem="{Binding SelectedTournament}"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled">
 
                     <ListBox.ItemsPanel>

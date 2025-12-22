@@ -16,6 +16,14 @@ public partial class HomeViewModel: ViewModelBase
     public ObservableCollection<Tournament>? TournamentHistory {get;set;}
 
     [ObservableProperty]
+    private Tournament? _selectedTournament;
+
+    partial void OnSelectedTournamentChanged(Tournament? value){
+        if(value is null) return;
+        TournamentCreated.Invoke(value);
+    }
+
+    [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required(ErrorMessage = "Enter a name")]
     [NotifyCanExecuteChangedFor(nameof(CreateTournamentCommand))]
@@ -34,6 +42,7 @@ public partial class HomeViewModel: ViewModelBase
 
     [ObservableProperty]
     private bool _showAddMenu=false;
+
 
     public event Action<Tournament> TournamentCreated;
 
@@ -59,6 +68,10 @@ public partial class HomeViewModel: ViewModelBase
         File.WriteAllText("history.json",JsonSerializer.Serialize(TournamentHistory));
 
         TournamentCreated.Invoke(newTournament);
+    }
+    [RelayCommand]
+    public void TournamentSelected(){
+        TournamentCreated.Invoke(SelectedTournament);
     }
 
     [RelayCommand]

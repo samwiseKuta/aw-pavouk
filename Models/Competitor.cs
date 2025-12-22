@@ -3,9 +3,9 @@ namespace Models;
 public class Competitor
 {
 
-    public string? name;
-    public int? weight;
-    public string? thumbnail;
-
+    public string Name;
+    public int Weight;
+    public string? Thumbnail;
+    public string? Origin {get;set;}
 
 }

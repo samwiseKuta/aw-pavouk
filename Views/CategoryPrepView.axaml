@@ -6,84 +6,121 @@
     x:DataType="vm:CategoryPrepViewModel"
     x:Class="Views.CategoryPrepView"
     >
-    <Grid RowDefinitions="*,auto">
-        <StackPanel>
-            <Grid Grid.Row="0" ColumnDefinitions="2*,auto">
+    <Grid ColumnDefinitions="25*,75*" >
+        <Grid RowDefinitions="auto,*,auto" Grid.Column="0">
+            <StackPanel Orientation="Vertical" Grid.Row="0" Background="">
+                <Label 
+                    VerticalAlignment="Top"
+                    Content="{Binding SelectedTournament.Name}"/>
+                <TextBlock 
+                    Opacity="{Binding BracketsEmpty}"
+                    IsVisible="{Binding BracketsEmpty}"
+                    TextWrapping="Wrap"
+                    Text="You have not created any categories yet"/>
+                <Label 
+                    Opacity="{Binding !BracketsEmpty}"
+                    IsVisible="{Binding !BracketsEmpty}"
+                    Content="Categories"/>
+            </StackPanel>
+            <ListBox
+                IsVisible="{Binding !BracketsEmpty}"
+                Opacity="{Binding !BracketsEmpty}"
+                ItemsSource="{Binding CreatedBrackets}"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                SelectedItem="{Binding SelectedBracket}"
+                Grid.Row="1"
+                ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel
+                            Orientation="Vertical"
+                            Spacing="10"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical" Classes="HistoryItem">
+                            <Label Content="{Binding Name}"/>
+                            <Label Content="{Binding Count}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button 
+                Grid.Row="2"
+                Command="{Binding BackCommand}"
+                VerticalAlignment="Bottom">
+                <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal">
+                    <Label Classes="Icon" Content="&#xE51E;"/>
+                    <TextBlock Text="Back"/>
+                </StackPanel> 
+            </Button>
+        </Grid>
+
+    <Grid Grid.Column="1" RowDefinitions="auto,*">
+
+            <Grid Grid.Row="0">
                 <Button 
+                    Command="{Binding CreateCategoryCommand}" 
                     Classes ="AddButton" 
-                    Click="NewTournamentClicked" 
                     VerticalAlignment="Top"
                     HorizontalAlignment="Stretch"
                     >
-                      <Border Classes="AddBorder">
+                    <Border Classes="AddBorder" HorizontalAlignment="Left">
                         <StackPanel Orientation="Horizontal" Spacing="0">
-                            <TextBlock Classes="AddText" Text="Add Category"></TextBlock>
-                            <Label Classes="Plus Icon" >&#xE3D6;</Label>
+                            <TextBlock Classes="AddPrompt" Text="New Category"/>
+                            <TextBlock Classes="Plus Icon">&#xE3D4;</TextBlock>
                         </StackPanel>
                     </Border>
                 </Button>
-                <Border Padding="1 0 0 0" 
-                    Width="600" 
-                    HorizontalAlignment="Right"
-                    Margin="2 0 0 0"
-                    Background=""
-                    Grid.Column="1"
-                    >
-                    <Svg Width="200" Path="/Assets/Images/ChatGPT-logo.svg" 
-                        VerticalAlignment="Top"
-                        HorizontalAlignment="Right"
-                        />
-                </Border>
-            </Grid>
-            <Separator/>
-            <Grid Classes="AddMenu" IsVisible="{Binding ShowAddMenu}" ColumnDefinitions="*,auto">
-                <StackPanel Grid.Column="0">
-                    <Label  Content="Name"></Label>
-                    <TextBox  Watermark="Golem's Hand"></TextBox>
-                    <Label  Content="Location"></Label>
-                    <TextBox  Watermark="Prague"></TextBox>
-                </StackPanel>
-                <StackPanel Grid.Column="1">
-                    <Label  Content="Date"></Label>
-                    <Calendar Width="300" Height="400"></Calendar>
-                </StackPanel>
-                <Separator/>
-            </Grid>
 
-        </StackPanel>
-        <Grid Grid.Row="1" RowDefinitions="auto,auto">
-            <StackPanel Grid.Row ="0" Orientation="Horizontal">
-                <TextBlock Padding="10 0 0 0" >Categories</TextBlock>
-                <Label Classes="Icon">&#xE7B4;</Label>
-            </StackPanel>
-            <Border Grid.Row="1" Padding="30" Background="">
-                <StackPanel Orientation="Horizontal" Spacing="11">
+                <Button 
+                    HorizontalAlignment="Right"
+                    HorizontalContentAlignment="Right"
+                    Command="{Binding BeginCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Classes="" Content="Begin"/>
+                        <Label Classes="Icon" Content="&#xEA36;"/>
+                    </StackPanel >
+                </Button>
+        </Grid>
+
+            <Grid Grid.Row="1" Grid.Column="1" RowDefinitions="auto,*" ColumnDefinitions="*,*">
+                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                    <Label Classes="Icon" Content="{Binding IconText}"/>
+                    <TextBlock Text="{Binding Action}"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Row="1">
+                    <Label  Classes="FormLabel" Content="Category"/>
+                    <TextBox  Text="{Binding SelectedBracket.Name}" Classes="FormInput" Watermark="Senior Men 90+kg"/> 
+                    <ComboBox SelectedIndex="1">
+                        <ComboBoxItem>Single Elimination</ComboBoxItem>
+                        <ComboBoxItem>Double Elimination</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1">
+                    <StackPanel Orientation="Horizontal">
+                        <Label  Classes="FormLabel" Content="Competitors:"/>
+                        <Label  Classes="FormLabel" Content="{Binding SelectedBracket.Count}"/>
+                    </StackPanel>
+                    <TextBox  
+                        Text="{Binding SelectedBracket.Name}" 
+                        Classes="FormInput" 
+                        Watermark=""
+                        AcceptsReturn="True"
+                        TextWrapping="Wrap"
+                        /> 
                     <Button>
-                        <StackPanel Orientation="Vertical">
-                            <Label>Juniors 85+</Label>
-                            <TextBlock>Members : 10</TextBlock>
-                        </StackPanel>
-                    </Button>
-                    <Button>
-                        <StackPanel Orientation="Vertical">
-                            <Label>Juniors 85+</Label>
-                            <TextBlock>Members : 10</TextBlock>
-                        </StackPanel>
-                    </Button>
-                    <Button>
-                        <StackPanel Orientation="Vertical">
-                            <Label>Juniors 85+</Label>
-                            <TextBlock>Members : 10</TextBlock>
-                        </StackPanel>
-                    </Button>
-                    <Button>
-                        <StackPanel Orientation="Vertical">
-                            <Label>Juniors 85+</Label>
-                            <TextBlock>Members : 10</TextBlock>
+                        <StackPanel Orientation="Horizontal">
+
+                            <TextBlock Text="Save"/>
+                            <Label Classes="Icon" Content="&#xE248;"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
-            </Border>
+            </Grid>
         </Grid>
+
     </Grid>
+
 </UserControl>

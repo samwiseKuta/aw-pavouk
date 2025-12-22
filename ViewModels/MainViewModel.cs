@@ -22,7 +22,14 @@ public partial class MainViewModel: ViewModelBase
     }
 
     private void OnTournamentCreated(Tournament tournament){
+        _categoryPrepView.GoBack +=GoBackFromCategories;
+        _categoryPrepView.SelectedTournament = tournament;
+        _homeView.SelectedTournament = null;
         CurrentView = _categoryPrepView;
+    }
+
+    private void GoBackFromCategories(){
+        CurrentView = _homeView;
     }
 
 
