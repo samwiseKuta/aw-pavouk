@@ -12,9 +12,6 @@
     MinWidth="1400" MinHeight="750"
     WindowStartupLocation="CenterScreen"
     >
-    <Window.DataContext>
-        <vm:MainViewModel></vm:MainViewModel>
-    </Window.DataContext>
 
     <ContentControl Content="{Binding CurrentView}" />
 

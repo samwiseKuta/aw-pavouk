@@ -7,12 +7,15 @@ using CommunityToolkit.Mvvm.Input;
 using System.Text.Json;
 using System.IO;
 using System.Collections.Generic;
+using Services;
 
 namespace ViewModels;
 
 
 public partial class HomeViewModel: ViewModelBase
 {
+
+    public HistoryWriter hw;
     public ObservableCollection<Tournament>? TournamentHistory {get;set;}
 
     [ObservableProperty]
@@ -47,7 +50,8 @@ public partial class HomeViewModel: ViewModelBase
     public event Action<Tournament> TournamentCreated;
 
 
-    public HomeViewModel(){
+    public HomeViewModel(HistoryWriter hw){
+        this.hw = hw;
         RefreshHistoryCommand.Execute(null);
     }
 
@@ -63,15 +67,17 @@ public partial class HomeViewModel: ViewModelBase
                 Location = TournamentLocation,
                 Date = TournamentDate
         };
-        TournamentHistory.Add(newTournament);
 
-        File.WriteAllText("history.json",JsonSerializer.Serialize(TournamentHistory));
+        hw.SaveToHistory(newTournament);
+        RefreshHistoryCommand.Execute(null);
 
         TournamentCreated.Invoke(newTournament);
     }
     [RelayCommand]
     public void TournamentSelected(){
-        TournamentCreated.Invoke(SelectedTournament);
+        Tournament temp = SelectedTournament;
+        SelectedTournament = null;
+        TournamentCreated.Invoke(temp);
     }
 
     [RelayCommand]
@@ -82,11 +88,6 @@ public partial class HomeViewModel: ViewModelBase
     [RelayCommand]
     public void RefreshHistory(string? path = null){
 
-        Tournament[] history = 
-            JsonSerializer.Deserialize<Tournament[]>(File.ReadAllText(path ?? "history.json"));
-        TournamentHistory=new ObservableCollection<Tournament>(
-                new List<Tournament>(history)
-                );
-        TournamentHistory = new ObservableCollection<Tournament>(new List<Tournament>(history));
+        TournamentHistory = new ObservableCollection<Tournament>(new List<Tournament>(hw.History));
     }
 }

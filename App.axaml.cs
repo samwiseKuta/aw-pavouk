@@ -3,6 +3,8 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Services;
+using ViewModels;
 
 namespace App;
 
@@ -29,7 +31,16 @@ public partial class App : Application
             }
 
 
-            desktop.MainWindow = new MainView();
+            HistoryWriter historyWriter = new HistoryWriter("history.json");
+
+            HomeViewModel homeView = new HomeViewModel(historyWriter);
+            CategoryPrepViewModel categoryView= new CategoryPrepViewModel(historyWriter);
+
+
+            MainViewModel mainView = new MainViewModel(homeView,categoryView);
+            desktop.MainWindow = new MainView(){
+                DataContext = mainView
+            };
         }
 
         base.OnFrameworkInitializationCompleted();

@@ -11,26 +11,36 @@ public partial class MainViewModel: ViewModelBase
     private ViewModelBase _currentView;
 
 
-    private readonly HomeViewModel _homeView;
-    private readonly CategoryPrepViewModel _categoryPrepView = new();
+    public HomeViewModel HomeView;
+    public CategoryPrepViewModel CategoryPrepView;
 
-    public MainViewModel(){
-        _homeView = new();
-        _homeView.TournamentCreated += OnTournamentCreated;
+    public MainViewModel(
+            HomeViewModel homeView,
+            CategoryPrepViewModel categoryView
+            )
+    {
+        this.HomeView = homeView;
+        this.CategoryPrepView = categoryView;
 
-        CurrentView = _homeView;
+        HomeView.TournamentCreated += OnTournamentCreated;
+
+        CurrentView = HomeView;
+        CategoryPrepView.GoBack += GoToHome;
+    }
+
+    private void GoToHome(){
+        CurrentView = HomeView;
+    }
+
+    private void GoToCategories(){
+        CurrentView = CategoryPrepView;
     }
 
     private void OnTournamentCreated(Tournament tournament){
-        _categoryPrepView.GoBack +=GoBackFromCategories;
-        _categoryPrepView.SelectedTournament = tournament;
-        _homeView.SelectedTournament = null;
-        CurrentView = _categoryPrepView;
+        CategoryPrepView.SelectedTournament = tournament;
+        GoToCategories();
     }
 
-    private void GoBackFromCategories(){
-        CurrentView = _homeView;
-    }
 
 
 }

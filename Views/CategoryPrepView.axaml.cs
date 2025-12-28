@@ -6,6 +6,7 @@ namespace Views;
 
 public partial class CategoryPrepView : UserControl
 {
+
     public CategoryPrepView()
     {
         InitializeComponent();

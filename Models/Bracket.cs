@@ -7,13 +7,15 @@ public class Bracket : IComparable<Bracket>
 {
 
 
-    public required string Name {get;set;}
+    private Node? root;
+    public string Name {get;set;}
     public int Depth {get;set;}
     public int Count {get;set;}
     public enum type{
         SingleElimination,
         DoubleElimination
     }
+    public List<Competitor> Competitors{get;set;}
     public class Node
     {
         public Competitor Competitor;
@@ -30,7 +32,11 @@ public class Bracket : IComparable<Bracket>
             return this.Competitor.ToString();
         }
     }
-    private Node? root;
+
+
+    public Bracket(){
+
+    }
 
     public Bracket GenerateEmpty(int participantsCount) {
 

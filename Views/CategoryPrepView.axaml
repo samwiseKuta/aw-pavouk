@@ -77,7 +77,7 @@
                 <Button 
                     HorizontalAlignment="Right"
                     HorizontalContentAlignment="Right"
-                    Command="{Binding BeginCommand}">
+                    Command="{Binding TestBracketCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Label Classes="" Content="Begin"/>
                         <Label Classes="Icon" Content="&#xEA36;"/>
@@ -100,16 +100,44 @@
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1">
                     <StackPanel Orientation="Horizontal">
-                        <Label  Classes="FormLabel" Content="Competitors:"/>
+                <Button 
+                    Command="" 
+                    Classes ="AddButton" 
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    >
+                    <Border Classes="AddBorder" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal" Spacing="0">
+                            <TextBlock Classes="AddPrompt" Text="Competitors"/>
+                            <TextBlock Classes="Plus Icon">&#xE3D4;</TextBlock>
+                        </StackPanel>
+                    </Border>
+                </Button>
                         <Label  Classes="FormLabel" Content="{Binding SelectedBracket.Count}"/>
                     </StackPanel>
-                    <TextBox  
-                        Text="{Binding SelectedBracket.Name}" 
-                        Classes="FormInput" 
-                        Watermark=""
-                        AcceptsReturn="True"
-                        TextWrapping="Wrap"
-                        /> 
+            <ListBox
+                ItemsSource="{Binding SelectedBracket.Competitors}"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                SelectedItem="{Binding SelectedCompetitor}"
+                Grid.Row="1"
+                ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel
+                            Orientation="Vertical"
+                            Spacing="10"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical" Classes="HistoryItem">
+                            <Label Content="{Binding Name}"/>
+                            <Label Content="{Binding Weight}"/>
+                            <Label Content="{Binding Origin}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
                     <Button>
                         <StackPanel Orientation="Horizontal">
 

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Models;
+using Services;
 
 namespace ViewModels;
 
@@ -13,7 +14,8 @@ public partial class CategoryPrepViewModel: ViewModelBase
 
 
     public ObservableCollection<Bracket> CreatedBrackets {get; set;}
-    
+    public HistoryWriter hw;
+
     public bool BracketsEmpty => CreatedBrackets.Count == 0;
 
     [ObservableProperty]
@@ -23,11 +25,15 @@ public partial class CategoryPrepViewModel: ViewModelBase
     private Bracket _selectedBracket;
 
     [ObservableProperty]
+    private Competitor _selectedCompetitor;
+
+    [ObservableProperty]
     private bool _showAddMenu=false;
 
     public event Action GoBack;
 
-    public CategoryPrepViewModel(){
+    public CategoryPrepViewModel(HistoryWriter hw){
+        this.hw = hw;
         CreatedBrackets = new ObservableCollection<Bracket>(new List<Bracket>());
         CreatedBrackets.CollectionChanged += (_, __) =>
             OnPropertyChanged(nameof(BracketsEmpty));
@@ -50,38 +56,40 @@ public partial class CategoryPrepViewModel: ViewModelBase
 
     [RelayCommand]
     public void CreateCategory(){
-        IconText="&#xE248;";
     }
 
     [RelayCommand]
     public void Begin(){
-        TestBracketCommand.Execute(null);
+        TestBracket();
     }
     [RelayCommand]
     public void TestBracket(){
-        CreatedBrackets.Add(
+        List<Bracket> newList = new List<Bracket>(CreatedBrackets);
+        newList.Add(
                 new Bracket(){
                 Name="Juniors 95kg",
                 Count=new Random().Next()
                 });
-        CreatedBrackets.Add(
+        newList.Add(
                 new Bracket(){
                 Name="Juniors 75kg",
                 Count=new Random().Next()
                 });
-        CreatedBrackets.Add(
+        newList.Add(
                 new Bracket(){
                 Name="Masters 95kg",
                 Count=new Random().Next()
                 });
-        CreatedBrackets.Add(
+        newList.Add(
                 new Bracket(){
                 Name="Women 65kg",
                 Count=new Random().Next()
                 });
-        List<Bracket> list = new List<Bracket>(CreatedBrackets);
-        list.Sort();
-        CreatedBrackets=new ObservableCollection<Bracket>(list);
+        newList.Sort();
+        CreatedBrackets.Clear();
+        foreach(Bracket b in newList){
+            CreatedBrackets.Add(b);
+        }
     }
     
 }
