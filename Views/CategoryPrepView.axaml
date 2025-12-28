@@ -41,7 +41,7 @@
                     <DataTemplate>
                         <StackPanel Orientation="Vertical" Classes="HistoryItem">
                             <Label Content="{Binding Name}"/>
-                            <Label Content="{Binding Count}"/>
+                            <Label Content="{Binding Competitors.Count}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -61,7 +61,7 @@
 
             <Grid Grid.Row="0">
                 <Button 
-                    Command="{Binding CreateCategoryCommand}" 
+                    Command="{Binding NewCategoryCommand}" 
                     Classes ="AddButton" 
                     VerticalAlignment="Top"
                     HorizontalAlignment="Stretch"
@@ -77,7 +77,7 @@
                 <Button 
                     HorizontalAlignment="Right"
                     HorizontalContentAlignment="Right"
-                    Command="{Binding TestBracketCommand}">
+                    Command="{Binding BeginCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Label Classes="" Content="Begin"/>
                         <Label Classes="Icon" Content="&#xEA36;"/>
@@ -86,20 +86,22 @@
         </Grid>
 
             <Grid Grid.Row="1" Grid.Column="1" RowDefinitions="auto,*" ColumnDefinitions="*,*">
-                <StackPanel Orientation="Horizontal" Grid.Row="0">
-                    <Label Classes="Icon" Content="{Binding IconText}"/>
-                    <TextBlock Text="{Binding Action}"/>
-                </StackPanel>
-                <StackPanel Orientation="Vertical" Grid.Row="1">
-                    <Label  Classes="FormLabel" Content="Category"/>
-                    <TextBox  Text="{Binding SelectedBracket.Name}" Classes="FormInput" Watermark="Senior Men 90+kg"/> 
+                <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0">
+                    <Label  Classes="FormLabel" Content="{Binding StateText}"/>
+                    <TextBox  Text="{Binding EditingBracketName}" Classes="FormInput" Watermark="Senior Men 90+kg"/> 
                     <ComboBox SelectedIndex="1">
                         <ComboBoxItem>Single Elimination</ComboBoxItem>
                         <ComboBoxItem>Double Elimination</ComboBoxItem>
                     </ComboBox>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1">
-                    <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1">
+                    <StackPanel>
+
+                    <Label  Classes="FormLabel" Content="Full Name"/>
+                    <TextBox  Text="" Classes="FormInput" Watermark="John Smith"/> 
+                        <Label  Classes="FormLabel" Content="Weight /kg"/>
+                        <NumericUpDown Classes="FormInput" Value="80" />
+                    </StackPanel>
                 <Button 
                     Command="" 
                     Classes ="AddButton" 
@@ -108,18 +110,42 @@
                     >
                     <Border Classes="AddBorder" HorizontalAlignment="Left">
                         <StackPanel Orientation="Horizontal" Spacing="0">
+                            <Label Classes="Icon" Content="&#xE4D0;"/>
                             <TextBlock Classes="AddPrompt" Text="Competitors"/>
                             <TextBlock Classes="Plus Icon">&#xE3D4;</TextBlock>
                         </StackPanel>
                     </Border>
                 </Button>
-                        <Label  Classes="FormLabel" Content="{Binding SelectedBracket.Count}"/>
-                    </StackPanel>
+                        <Label  Classes="FormLabel" Content="{Binding EditingBracketList.Count}"/>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Orientation="Horizontal"
+                    >
+                    <Button
+                        Command="{Binding CreateCategoryCommand}"
+                        >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Create"/>
+                            <Label Classes="Icon" Content="&#xE2F8;"/>
+                        </StackPanel>
+                    </Button>
+                    <Button
+                        Command="{Binding SaveCategoryCommand}"
+                        >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Save"/>
+                            <Label Classes="Icon" Content="&#xE248;"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
             <ListBox
-                ItemsSource="{Binding SelectedBracket.Competitors}"
+                ItemsSource="{Binding EditingBracketList}"
                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
                 SelectedItem="{Binding SelectedCompetitor}"
                 Grid.Row="1"
+                        Grid.Column="1"
                 ScrollViewer.VerticalScrollBarVisibility="Auto">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -138,14 +164,6 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-                    <Button>
-                        <StackPanel Orientation="Horizontal">
-
-                            <TextBlock Text="Save"/>
-                            <Label Classes="Icon" Content="&#xE248;"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
             </Grid>
         </Grid>
 

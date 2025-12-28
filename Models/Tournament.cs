@@ -9,12 +9,13 @@ public class Tournament : IEquatable<Tournament>
     public required string Name {get;set;}
     public required string Location {get;set;}
     public DateTime Date {get;set;}
-    List<Bracket>? brackets;
-    List<int>? tables;
+    public List<Bracket>? Brackets;
+    public List<int>? Tables;
 
 
     public Tournament(){
-
+        Brackets = new ();
+        Tables = new();
     }
 
     public override string? ToString()

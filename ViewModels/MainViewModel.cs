@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Models;
 
@@ -38,6 +39,7 @@ public partial class MainViewModel: ViewModelBase
 
     private void OnTournamentCreated(Tournament tournament){
         CategoryPrepView.SelectedTournament = tournament;
+        CategoryPrepView.CreatedBrackets = new ObservableCollection<Bracket>(tournament.Brackets);
         GoToCategories();
     }
 

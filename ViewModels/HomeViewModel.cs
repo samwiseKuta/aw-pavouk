@@ -23,7 +23,8 @@ public partial class HomeViewModel: ViewModelBase
 
     partial void OnSelectedTournamentChanged(Tournament? value){
         if(value is null) return;
-        TournamentCreated.Invoke(value);
+        SelectedTournament = value;
+        TournamentSelectedCommand.Execute(null);
     }
 
     [ObservableProperty]

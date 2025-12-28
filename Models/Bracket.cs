@@ -10,8 +10,8 @@ public class Bracket : IComparable<Bracket>
     private Node? root;
     public string Name {get;set;}
     public int Depth {get;set;}
-    public int Count {get;set;}
-    public enum type{
+    public int NodeCount {get;set;}
+    public enum Type {
         SingleElimination,
         DoubleElimination
     }
@@ -57,7 +57,7 @@ public class Bracket : IComparable<Bracket>
 
         if(this.root is null) {
             this.root = leafNode;
-            this.Count = 1;
+            this.NodeCount = 1;
             this.Depth = 0;
             return;
         }
@@ -85,6 +85,7 @@ public class Bracket : IComparable<Bracket>
     public override string? ToString()
     {
 
+        return this.Name + "";
         Queue<Node> queue = new Queue<Node>();
         queue.Enqueue(this.root!);
         List<List<Node>> levels = new List<List<Node>>();

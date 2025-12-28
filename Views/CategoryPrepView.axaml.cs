@@ -1,3 +1,4 @@
+using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using ViewModels;
@@ -12,9 +13,4 @@ public partial class CategoryPrepView : UserControl
         InitializeComponent();
     }
 
-    public void NewTournamentClicked(object sender, RoutedEventArgs e){
-
-        (DataContext as CategoryPrepViewModel)?.HideShowMenu();
-
-    }
 }
