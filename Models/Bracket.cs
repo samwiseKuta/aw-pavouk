@@ -9,12 +9,15 @@ public class Bracket : IComparable<Bracket>
 
     private Node? root;
     public string Name {get;set;}
+    public string Elimination {get;set;}
     public int Depth {get;set;}
     public int NodeCount {get;set;}
     public enum Type {
         SingleElimination,
         DoubleElimination
     }
+
+    public static Dictionary<string,string> EnumToString;
     public List<Competitor> Competitors{get;set;}
     public class Node
     {
@@ -123,5 +126,15 @@ public class Bracket : IComparable<Bracket>
         if(other is null) return -1;
 
         return other.Name.CompareTo(this.Name);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return base.Equals(obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Name,Competitors.Count,Elimination);
     }
 }

@@ -14,13 +14,10 @@ public partial class CategoryPrepViewModel: ViewModelBase
 {
 
 
-    public ObservableCollection<Bracket> CreatedBrackets {get; set;} = new();
+    public ObservableCollection<Bracket> CreatedBrackets {get;} = new();
     public HistoryWriter hw;
 
     public bool BracketsEmpty => CreatedBrackets.Count == 0;
-
-    [ObservableProperty]
-    private bool _editCreateMode;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CreatedBrackets))]
@@ -35,10 +32,14 @@ public partial class CategoryPrepViewModel: ViewModelBase
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanExecuteCreate))]
     [NotifyCanExecuteChangedFor(nameof(CreateCategoryCommand))]
-    private Bracket.Type _editingBracketType;
+    private string _editingBracketType = "Double Elimination";
 
-    [ObservableProperty]
-    private List<Competitor> _editingBracketList = new();
+    public List<string> BracketTypes {get;} = new List<string>(){
+        "Single Elimination",
+        "Double Elimination",
+    };
+
+    public ObservableCollection<Competitor> EditingCompetitorList {get;set;} = new();
 
     [ObservableProperty]
     private string _editingCompetitorName;
@@ -49,23 +50,23 @@ public partial class CategoryPrepViewModel: ViewModelBase
     [NotifyPropertyChangedFor(nameof(IsBracketSelected))]
     [NotifyPropertyChangedFor(nameof(StateText))]
     [NotifyPropertyChangedFor(nameof(CanExecuteCreate))]
+    [NotifyCanExecuteChangedFor(nameof(CreateCategoryCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SaveCategoryCommand))]
     private Bracket _selectedBracket;
     partial void OnSelectedBracketChanged(Bracket value)
         {
-            SelectedBracket = value;
+            if(value is null) return;
+            ResetFormInputs();
             EditingBracketName = SelectedBracket.Name;
-            EditingBracketType = Bracket.Type.DoubleElimination;
-            EditingBracketList = SelectedBracket.Competitors;
-            EditingCompetitorName = String.Empty;
-            EditingCompetitorWeight = 80;
+            EditingBracketType = SelectedBracket.Elimination ?? "Double Elimination";
+            FlushAndFillCompetitors(SelectedBracket.Competitors);
         }
 
     public bool IsBracketSelected => SelectedBracket is not null;
     public bool CanExecuteCreate=> 
         (
          !IsBracketSelected && 
-         EditingBracketName is not null &&
-         EditingBracketList is not null
+         !string.IsNullOrWhiteSpace(EditingBracketName)
             );
 
     public string StateText => IsBracketSelected ? "Editing Category" : "New Category";
@@ -77,8 +78,7 @@ public partial class CategoryPrepViewModel: ViewModelBase
 
     public CategoryPrepViewModel(HistoryWriter hw){
         this.hw = hw;
-        //CreatedBrackets = new ();
-        CreatedBrackets.CollectionChanged += (_, __) =>
+        CreatedBrackets.CollectionChanged +=  (_,_) =>
             OnPropertyChanged(nameof(BracketsEmpty));
     }
 
@@ -90,71 +90,83 @@ public partial class CategoryPrepViewModel: ViewModelBase
         GoBack.Invoke();
     }
     [RelayCommand]
-    public void NewCategory(){
-        SelectedBracket = null;
-        EditingBracketName = String.Empty;
-        EditingBracketType = Bracket.Type.DoubleElimination;
+    public void AddCompetitor(){
+        EditingCompetitorList.Add(new Competitor(){
+                Name = EditingCompetitorName,
+                Weight = EditingCompetitorWeight
+                });
         EditingCompetitorName = String.Empty;
         EditingCompetitorWeight = 80;
+        
+    }
+    [RelayCommand]
+    public void NewCategory(){
+        SelectedBracket = null;
+        ResetFormInputs();
 
     }
     [RelayCommand(CanExecute =nameof(CanExecuteCreate))]
     public void CreateCategory(){
         Bracket newBracket = new Bracket(){
             Name = EditingBracketName,
-            Competitors = EditingBracketList
+            Competitors = new List<Competitor>(EditingCompetitorList),
+            Elimination = EditingBracketType
         };
         List<Bracket> newList = new List<Bracket>(CreatedBrackets);
         newList.Add(newBracket);
-        newList.Sort();
-        CreatedBrackets.Clear();
-        foreach(Bracket b in newList){
-            Console.WriteLine(b);
-            CreatedBrackets.Add(b);
-        }
-        //SelectedTournament.Brackets.Add(newBracket);
-        //hw.SaveToHistory(SelectedTournament);
+        FlushAndFillBrackets(newList);
+        SelectedTournament.Brackets.Add(newBracket);
+        hw.SaveToHistory(SelectedTournament);
+        ResetFormInputs();
     }
 
-    [RelayCommand(CanExecute =nameof(CanExecuteCreate))]
+    [RelayCommand(CanExecute =nameof(IsBracketSelected))]
     public void SaveCategory(){
+        SelectedBracket = null;
         List<Bracket> newList = new List<Bracket>(CreatedBrackets);
-        newList.Add(
-                new Bracket(){
-                Name="Juniors 95kg",
-                NodeCount=new Random().Next()
-                });
-        newList.Add(
-                new Bracket(){
-                Name="Juniors 75kg",
-                NodeCount=new Random().Next()
-                });
-        newList.Add(
-                new Bracket(){
-                Name="Masters 95kg",
-                NodeCount=new Random().Next()
-                });
-        newList.Add(
-                new Bracket(){
-                Name="Women 65kg",
-                NodeCount=new Random().Next()
-                });
-        newList.Sort();
-        CreatedBrackets.Clear();
-        foreach(Bracket b in newList){
-            CreatedBrackets.Add(b);
+        int i = newList.FindIndex(x => x.Name.Equals(EditingBracketName));
+        if(i == -1) {
+            Console.WriteLine("Something went wrong here:",EditingBracketName);
         }
-
+        else{
+            Bracket changedBracket = CreatedBrackets[i];
+            changedBracket.Name = EditingBracketName;
+            changedBracket.Competitors = new List<Competitor>(EditingCompetitorList);
+            changedBracket.Elimination = EditingBracketType;
+            CreatedBrackets[i] = changedBracket;
+            SelectedTournament.Brackets[i] = changedBracket;
+            hw.SaveToHistory(SelectedTournament);
+            ResetFormInputs();
+        }
     }
 
     [RelayCommand]
     public void Begin(){
-        Console.WriteLine(EditingBracketName);
-        Console.WriteLine(EditingBracketList);
-        Console.WriteLine(CanExecuteCreate);
-        Console.WriteLine(CreatedBrackets.Count);
-        Console.WriteLine(BracketsEmpty);
+        Console.WriteLine(EditingBracketType);
+    }
 
-        //CreatedBrackets.Clear();
+    public void FlushAndFillBrackets(List<Bracket> brackets){
+        if(brackets is null) return;
+        brackets.Sort();
+        CreatedBrackets.Clear();
+        foreach(Bracket b in brackets){
+            CreatedBrackets.Add(b);
+        }
+    }
+    public void FlushAndFillCompetitors(List<Competitor> competitors){
+        if(competitors is null) return;
+        competitors.Sort();
+        EditingCompetitorList.Clear();
+        foreach(Competitor c in competitors){
+            EditingCompetitorList.Add(c);
+        }
+    }
+
+    public void ResetFormInputs(){
+        EditingBracketName = String.Empty;
+        EditingCompetitorList.Clear();  
+        EditingCompetitorName = String.Empty;
+        EditingCompetitorWeight = 80;
+        EditingBracketType = "Double Elimination";
     }
 }

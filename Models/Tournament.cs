@@ -9,8 +9,8 @@ public class Tournament : IEquatable<Tournament>
     public required string Name {get;set;}
     public required string Location {get;set;}
     public DateTime Date {get;set;}
-    public List<Bracket>? Brackets;
-    public List<int>? Tables;
+    public List<Bracket>? Brackets {get;set;}
+    public List<int>? Tables{get;set;}
 
 
     public Tournament(){

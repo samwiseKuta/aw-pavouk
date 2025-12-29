@@ -41,7 +41,10 @@
                     <DataTemplate>
                         <StackPanel Orientation="Vertical" Classes="HistoryItem">
                             <Label Content="{Binding Name}"/>
+                            <StackPanel Orientation="Horizontal">
                             <Label Content="{Binding Competitors.Count}"/>
+                            <Label Content="{Binding Elimination}"/>
+                            </StackPanel>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -89,21 +92,25 @@
                 <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0">
                     <Label  Classes="FormLabel" Content="{Binding StateText}"/>
                     <TextBox  Text="{Binding EditingBracketName}" Classes="FormInput" Watermark="Senior Men 90+kg"/> 
-                    <ComboBox SelectedIndex="1">
-                        <ComboBoxItem>Single Elimination</ComboBoxItem>
-                        <ComboBoxItem>Double Elimination</ComboBoxItem>
+                    <ComboBox 
+                        ItemsSource="{Binding BracketTypes}"
+                        SelectedItem="{Binding EditingBracketType}"
+                        SelectedIndex="1"
+                        >
                     </ComboBox>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1">
                     <StackPanel>
 
                     <Label  Classes="FormLabel" Content="Full Name"/>
-                    <TextBox  Text="" Classes="FormInput" Watermark="John Smith"/> 
+                        <TextBox  
+                            Text="{Binding EditingCompetitorName}" 
+                            Classes="FormInput" Watermark="John Smith"/> 
                         <Label  Classes="FormLabel" Content="Weight /kg"/>
-                        <NumericUpDown Classes="FormInput" Value="80" />
+                        <NumericUpDown Classes="FormInput" Value="{Binding EditingCompetitorWeight}" />
                     </StackPanel>
                 <Button 
-                    Command="" 
+                        Command="{Binding AddCompetitorCommand}" 
                     Classes ="AddButton" 
                     VerticalAlignment="Top"
                     HorizontalAlignment="Stretch"
@@ -116,7 +123,7 @@
                         </StackPanel>
                     </Border>
                 </Button>
-                        <Label  Classes="FormLabel" Content="{Binding EditingBracketList.Count}"/>
+                        <Label  Classes="FormLabel" Content="{Binding EditingCompetitorList.Count}"/>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -127,7 +134,7 @@
                         Command="{Binding CreateCategoryCommand}"
                         >
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Create"/>
+                            <TextBlock Text="Add"/>
                             <Label Classes="Icon" Content="&#xE2F8;"/>
                         </StackPanel>
                     </Button>
@@ -141,7 +148,7 @@
                     </Button>
                 </StackPanel>
             <ListBox
-                ItemsSource="{Binding EditingBracketList}"
+                ItemsSource="{Binding EditingCompetitorList}"
                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
                 SelectedItem="{Binding SelectedCompetitor}"
                 Grid.Row="1"
@@ -156,10 +163,10 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Vertical" Classes="HistoryItem">
-                            <Label Content="{Binding Name}"/>
-                            <Label Content="{Binding Weight}"/>
-                            <Label Content="{Binding Origin}"/>
+                        <StackPanel Orientation="Horizontal" Classes="">
+                            <TextBlock Text="{Binding Name}"/>
+                            <TextBlock Text="{Binding Weight}"/>
+                            <TextBlock Text="{Binding Origin}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
