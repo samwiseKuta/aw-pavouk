@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.IO;
 using System.Collections.Generic;
 using Services;
+using System.Linq;
 
 namespace ViewModels;
 
@@ -16,7 +17,8 @@ public partial class HomeViewModel: ViewModelBase
 {
 
     public HistoryWriter hw;
-    public ObservableCollection<Tournament>? TournamentHistory {get;set;}
+    [ObservableProperty]
+    private ObservableCollection<Tournament>? _tournamentHistory = new();
 
     [ObservableProperty]
     private Tournament? _selectedTournament;
@@ -88,7 +90,17 @@ public partial class HomeViewModel: ViewModelBase
 
     [RelayCommand]
     public void RefreshHistory(string? path = null){
+        //TournamentHistory = new ObservableCollection<Tournament>(new List<Tournament>(hw.History));
+        TournamentHistory.Clear();
+        new List<Tournament>(hw.History).ForEach(x => TournamentHistory.Add(x));
 
-        TournamentHistory = new ObservableCollection<Tournament>(new List<Tournament>(hw.History));
+    }
+
+    [RelayCommand]
+    public void DeleteHistoryItem(Tournament t){
+        hw.RemoveFromHistory(t);
+        RefreshHistoryCommand.Execute(null);
+
+        
     }
 }

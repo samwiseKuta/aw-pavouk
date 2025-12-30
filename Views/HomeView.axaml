@@ -95,11 +95,22 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Vertical" Classes="HistoryItem">
-                                <TextBlock Classes="Date" Margin="5 0" Text="{Binding Date}"/>
-                                <Label Content="{Binding Name}"/>
-                                <TextBlock Classes="Location" Margin="5 0" Text="{Binding Location}"/>
-                            </StackPanel>
+                            <Grid RowDefinitions="*,auto">
+                                <StackPanel Grid.Row="0" Orientation="Vertical" Classes="HistoryItem">
+                                    <TextBlock Classes="Date" Margin="5 0" Text="{Binding Date}"/>
+                                    <Label Content="{Binding Name}"/>
+                                    <TextBlock Classes="Location" Margin="5 0" Text="{Binding Location}"/>
+                                </StackPanel>
+                                <Button 
+                                    Grid.Row="1" 
+                                    HorizontalAlignment="Right" 
+                                    FontSize="20"
+                                    Command="{Binding $parent[ListBox].((vm:HomeViewModel)DataContext).DeleteHistoryItemCommand}"
+                                    CommandParameter="{Binding .}"
+                                    >
+                                    <Label Classes="Icon" Content="&#xE4A6;"/>
+                                </Button>
+                            </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

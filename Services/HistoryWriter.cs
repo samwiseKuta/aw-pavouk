@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -30,7 +31,19 @@ public class HistoryWriter
         }
 
         File.WriteAllText(Filepath,JsonSerializer.Serialize(History));
+    }
 
+    public void RemoveFromHistory(Tournament t){
+        int i = History.FindIndex(x => x.Equals(t));
+
+        if(i==-1) {
+            return;
+        }
+        else{
+            History.RemoveAt(i);
+        }
+
+        File.WriteAllText(Filepath,JsonSerializer.Serialize(History));
     }
 
 

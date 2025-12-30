@@ -14,7 +14,8 @@ public partial class CategoryPrepViewModel: ViewModelBase
 {
 
 
-    public ObservableCollection<Bracket> CreatedBrackets {get;} = new();
+    [ObservableProperty]
+    private ObservableCollection<Bracket> _createdBrackets  = new();
     public HistoryWriter hw;
 
     public bool BracketsEmpty => CreatedBrackets.Count == 0;
@@ -39,7 +40,8 @@ public partial class CategoryPrepViewModel: ViewModelBase
         "Double Elimination",
     };
 
-    public ObservableCollection<Competitor> EditingCompetitorList {get;set;} = new();
+    [ObservableProperty]
+    private ObservableCollection<Competitor> _editingCompetitorList = new();
 
     [ObservableProperty]
     private string _editingCompetitorName;
@@ -55,7 +57,9 @@ public partial class CategoryPrepViewModel: ViewModelBase
     private Bracket _selectedBracket;
     partial void OnSelectedBracketChanged(Bracket value)
         {
-            if(value is null) return;
+            if(value is null){
+                return;
+            }
             ResetFormInputs();
             EditingBracketName = SelectedBracket.Name;
             EditingBracketType = SelectedBracket.Elimination ?? "Double Elimination";
@@ -142,7 +146,19 @@ public partial class CategoryPrepViewModel: ViewModelBase
 
     [RelayCommand]
     public void Begin(){
-        Console.WriteLine(EditingBracketType);
+    }
+    [RelayCommand]
+    public void DeleteCategoryItem(Bracket b){
+        SelectedTournament.Brackets.Remove(b);
+        hw.SaveToHistory(SelectedTournament);
+
+        FlushAndFillBrackets(SelectedTournament.Brackets);
+
+    }
+
+    [RelayCommand]
+    public void DeleteCompetitorItem(Competitor c){
+        EditingCompetitorList.Remove(c);
     }
 
     public void FlushAndFillBrackets(List<Bracket> brackets){
@@ -152,9 +168,12 @@ public partial class CategoryPrepViewModel: ViewModelBase
         foreach(Bracket b in brackets){
             CreatedBrackets.Add(b);
         }
+        ResetFormInputs();
     }
     public void FlushAndFillCompetitors(List<Competitor> competitors){
-        if(competitors is null) return;
+        if(competitors is null){
+            return;
+        }
         competitors.Sort();
         EditingCompetitorList.Clear();
         foreach(Competitor c in competitors){
@@ -169,4 +188,5 @@ public partial class CategoryPrepViewModel: ViewModelBase
         EditingCompetitorWeight = 80;
         EditingBracketType = "Double Elimination";
     }
+
 }

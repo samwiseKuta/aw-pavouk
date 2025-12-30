@@ -39,13 +39,24 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Vertical" Classes="HistoryItem">
-                            <Label Content="{Binding Name}"/>
-                            <StackPanel Orientation="Horizontal">
-                            <Label Content="{Binding Competitors.Count}"/>
-                            <Label Content="{Binding Elimination}"/>
+                                   <Grid ColumnDefinitions="auto,*">
+                                <Button 
+                                    Grid.Column="0" 
+                                    HorizontalAlignment="Right" 
+                                    FontSize="20"
+                                    Command="{Binding $parent[ListBox].((vm:CategoryPrepViewModel)DataContext).DeleteCategoryItemCommand}"
+                                    CommandParameter="{Binding .}"
+                                    >
+                                    <Label Classes="Icon" Content="&#xE4A6;"/>
+                                </Button>
+                            <StackPanel Grid.Column="1" Orientation="Vertical" Classes="HistoryItem">
+                                <Label Content="{Binding Name}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{Binding Competitors.Count}"/>
+                                    <Label Content="{Binding Elimination}"/>
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -163,11 +174,23 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Classes="">
-                            <TextBlock Text="{Binding Name}"/>
-                            <TextBlock Text="{Binding Weight}"/>
-                            <TextBlock Text="{Binding Origin}"/>
-                        </StackPanel>
+                            <Grid ColumnDefinitions="*,auto">
+                                <StackPanel Grid.Column="0"  Orientation="Horizontal" Classes="">
+                                    <TextBlock Text="{Binding Name}"/>
+                                    <TextBlock Text="{Binding Weight}"/>
+                                    <TextBlock Text="{Binding Origin}"/>
+                                </StackPanel>
+
+                                <Button 
+                                    Grid.Column="1" 
+                                    HorizontalAlignment="Right" 
+                                    FontSize="20"
+                                    Command="{Binding $parent[ListBox].((vm:CategoryPrepViewModel)DataContext).DeleteCompetitorItemCommand}"
+                                    CommandParameter="{Binding .}"
+                                    >
+                                    <Label Classes="Icon" Content="&#xE4A6;"/>
+                                </Button>
+                            </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

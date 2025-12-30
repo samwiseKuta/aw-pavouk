@@ -1,6 +1,8 @@
+using System;
+
 namespace Models;
 
-public class Competitor
+public class Competitor : IEquatable<Competitor>,IComparable<Competitor>
 {
 
     public string Name {get;set;}
@@ -8,14 +10,25 @@ public class Competitor
     public string? Thumbnail {get;set;}
     public string? Origin {get;set;}
 
+    public int CompareTo(Competitor? other)
+    {
+        return this.Name.CompareTo(other.Name);
+    }
+
     public override bool Equals(object? obj)
     {
-        return base.Equals(obj);
+        if(obj is null) return false;
+        return this.GetHashCode() == obj?.GetHashCode();
+    }
+
+    public bool Equals(Competitor? other)
+    {
+        return this.GetHashCode() == other.GetHashCode();
     }
 
     public override int GetHashCode()
     {
-        return base.GetHashCode();
+        return HashCode.Combine(Name,Weight,Origin);
     }
 
     public override string? ToString()

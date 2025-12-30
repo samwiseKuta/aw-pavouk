@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace Models;
-public class Bracket : IComparable<Bracket>
+public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
 {
 
 
@@ -130,11 +130,16 @@ public class Bracket : IComparable<Bracket>
 
     public override bool Equals(object? obj)
     {
-        return base.Equals(obj);
+        return this.GetHashCode() == obj.GetHashCode();
     }
 
     public override int GetHashCode()
     {
         return HashCode.Combine(Name,Competitors.Count,Elimination);
+    }
+
+    public bool Equals(Bracket? other)
+    {
+        return GetHashCode() == other.GetHashCode();
     }
 }
