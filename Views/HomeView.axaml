@@ -9,15 +9,14 @@
     x:Class="Views.HomeView"
     x:DataType="vm:HomeViewModel"
     >
-
-    <Grid RowDefinitions="auto,35*">
-        <Grid RowDefinitions="auto,auto">
+    <Grid RowDefinitions="auto,*">
+        <Grid Grid.Row="0" RowDefinitions="auto,auto">
             <Grid Grid.Row="0" ColumnDefinitions="*,*">
                 <Button 
                     Grid.Column="0"
                     Classes ="AddButton" 
                     Classes.Open="{Binding ShowAddMenu}"
-                    Click="NewTournamentClicked" 
+                    Command="{Binding NewTournamentCommand}"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Stretch"
                     >
@@ -28,7 +27,18 @@
                         </StackPanel>
                     </Border>
                 </Button>
-                <Border 
+                <Button Grid.Column="1" 
+                    HorizontalAlignment="Right"
+                    Command="{Binding InvokeTournamentPickedCommand}"
+                    IsVisible="{Binding IsTournamentSelected}"
+                    Opacity="{Binding IsTournamentSelected}"
+                    >
+                         <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Categories "/>
+                        <Label Classes="" Content="&#xE520;"/>
+                    </StackPanel>
+                </Button>
+                <!--<Border 
                     Grid.Column="1"
                     Padding="1 0 0 0" 
                     Width="600" 
@@ -44,29 +54,51 @@
                             />
 
                     </StackPanel>
-                </Border>
+                </Border>-->
             </Grid>
-            <Grid 
-                Grid.Row="1" 
+            <StackPanel Grid.Row="1"
                 Opacity="{Binding ShowAddMenu}" 
-                ColumnDefinitions="*,auto"
                 Classes="AddMenu"
+                >
+            <Grid 
+                ColumnDefinitions="*,auto"
                 >
                 <StackPanel Grid.Column="0">
                     <Label  Classes="FormLabel" Content="Name"/>
                     <TextBox  Text="{Binding TournamentName}" Classes="FormInput" Watermark="Golem's Hand"/> 
                     <Label   Classes="FormLabel" Content="Location"/>
                     <TextBox Text="{Binding TournamentLocation}" Classes="FormInput" Watermark="Prague"/>
-                    <Button Command="{Binding CreateTournamentCommand}">
-                        <Label Classes="FormSubmitButton" Content="&#xE520; Create"/>
-                    </Button>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <Label  Content="Date of competition"/>
                     <CalendarDatePicker SelectedDate="{Binding TournamentDate}"/>
+                        <Label   Classes="FormLabel" Content="Tables"/>
+                        <NumericUpDown 
+                            FormatString="0" 
+                            Value="{Binding TournamentTables}" 
+                            Minimum="1"
+                            />
                 </StackPanel>
             </Grid>
-            <Separator Margin="0 40 0 0"/>
+                <Button 
+                    Command="{Binding CreateTournamentCommand}"
+                    IsVisible="{Binding !CurrentlyEditing}"
+                    >
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Create tournament"/>
+                        <Label Classes="Icon" Content="&#xE2F8;"/>
+                    </StackPanel>
+                    </Button>
+                <Button 
+                    Command="{Binding SaveTournamentCommand}"
+                    IsVisible="{Binding CurrentlyEditing}"
+                    >
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Save changes"/>
+                        <Label Classes="Icon" Content="&#xE248;"/>
+                    </StackPanel>
+                    </Button>
+            </StackPanel>
         </Grid>
         <Grid Grid.Row="1" RowDefinitions="auto,*" Classes="HistoryBlock">
             <StackPanel Grid.Row ="0" Orientation="Horizontal" Background="Red">

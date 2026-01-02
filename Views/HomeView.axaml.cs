@@ -11,12 +11,4 @@ public partial class HomeView : UserControl
     {
         InitializeComponent();
     }
-    public void NewTournamentClicked(object sender, RoutedEventArgs e){
-
-        (DataContext as HomeViewModel)?.HideShowMenuCommand.Execute(null);
-    }
-
-    public void CreateTournamentClicked(object sender, RoutedEventArgs e){
-
-    }
 }

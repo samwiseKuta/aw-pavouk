@@ -2,11 +2,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Views;
+namespace App;
 
-public partial class BattleView : UserControl
+public partial class DisplayFightsView : Window
 {
-    public BattleView()
+    public DisplayFightsView()
     {
         InitializeComponent();
     }

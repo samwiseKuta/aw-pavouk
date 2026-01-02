@@ -65,7 +65,7 @@
                 Command="{Binding BackCommand}"
                 VerticalAlignment="Bottom">
                 <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal">
-                    <Label Classes="Icon" Content="&#xE51E;"/>
+                    <Label Classes="" Content="&#xE523;"/>
                     <TextBlock Text="Back"/>
                 </StackPanel> 
             </Button>

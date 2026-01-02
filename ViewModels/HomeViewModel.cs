@@ -4,11 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Text.Json;
-using System.IO;
 using System.Collections.Generic;
 using Services;
-using System.Linq;
 
 namespace ViewModels;
 
@@ -17,16 +14,18 @@ public partial class HomeViewModel: ViewModelBase
 {
 
     public HistoryWriter hw;
+
+
     [ObservableProperty]
     private ObservableCollection<Tournament>? _tournamentHistory = new();
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsTournamentSelected))]
     private Tournament? _selectedTournament;
 
     partial void OnSelectedTournamentChanged(Tournament? value){
         if(value is null) return;
-        SelectedTournament = value;
-        TournamentSelectedCommand.Execute(null);
+        TournamentSelectedCommand.Execute(value);
     }
 
     [ObservableProperty]
@@ -47,60 +46,109 @@ public partial class HomeViewModel: ViewModelBase
     private DateTime _tournamentDate = DateTime.Now;
 
     [ObservableProperty]
+    private int _tournamentTables = 3;
+
+    [ObservableProperty]
     private bool _showAddMenu=false;
 
+    [ObservableProperty]
+    private bool _currentlyEditing;
 
-    public event Action<Tournament> TournamentCreated;
+    public bool IsTournamentSelected => SelectedTournament is not null;
 
+
+    public event Action<Tournament> TournamentPicked;
 
     public HomeViewModel(HistoryWriter hw){
         this.hw = hw;
         RefreshHistoryCommand.Execute(null);
     }
 
-    public bool CanExecuteCreateTournament => (
+    public  bool CanExecuteCreateTournament => (
             !String.Empty.Equals(TournamentName) &&
             !String.Empty.Equals(TournamentLocation)
             );
 
+    [RelayCommand()]
+    public void NewTournament(){
+        if(ShowAddMenu is true && CurrentlyEditing is false && String.IsNullOrEmpty(TournamentName)){
+            ShowAddMenu = false;
+            return;
+        }
+        SelectedTournament = null;
+        CurrentlyEditing = false;
+        ShowAddMenu = true;
+        ResetFormInputs();
+        OnPropertyChanged(nameof(SelectedTournament));
+    }
     [RelayCommand(CanExecute=nameof(CanExecuteCreateTournament))]
     public void CreateTournament(){
         Tournament newTournament = new Tournament(){
                 Name = TournamentName,
                 Location = TournamentLocation,
+                Tables = NewTables(),
                 Date = TournamentDate
         };
-
         hw.SaveToHistory(newTournament);
         RefreshHistoryCommand.Execute(null);
-
-        TournamentCreated.Invoke(newTournament);
+        SelectedTournament = newTournament;
+        ResetFormInputs();
+        InvokeTournamentPicked();
     }
     [RelayCommand]
-    public void TournamentSelected(){
-        Tournament temp = SelectedTournament;
+    public void SaveTournament(){
+        SelectedTournament.Name = TournamentName;
+        SelectedTournament.Date = TournamentDate;
+        SelectedTournament.Location = TournamentLocation;
+        SelectedTournament.Tables = NewTables();
+        hw.SaveToHistory(SelectedTournament);
         SelectedTournament = null;
-        TournamentCreated.Invoke(temp);
+        CurrentlyEditing=false;
+        ResetFormInputs();
+        ShowAddMenu = false;
+        RefreshHistoryCommand.Execute(null);
+    }
+
+    [RelayCommand(CanExecute=nameof(IsTournamentSelected))]
+    public void InvokeTournamentPicked(){
+        TournamentPicked(SelectedTournament);
+
+    }
+    [RelayCommand]
+    public void TournamentSelected(Tournament t){
+        ShowAddMenu=true;
+        CurrentlyEditing=true;
+        SelectedTournament = t;
+        TournamentName = t.Name;
+        TournamentLocation = t.Location;
+        TournamentDate = t.Date;
+        TournamentTables = t.Tables?.Count ?? 3;
+        OnPropertyChanged(nameof(IsTournamentSelected));
     }
 
     [RelayCommand]
-    public void HideShowMenu(){
-        ShowAddMenu = !ShowAddMenu;
-    }
-
-    [RelayCommand]
-    public void RefreshHistory(string? path = null){
-        //TournamentHistory = new ObservableCollection<Tournament>(new List<Tournament>(hw.History));
+    public void RefreshHistory(){
+        ResetFormInputs();
+        SelectedTournament=null;
         TournamentHistory.Clear();
         new List<Tournament>(hw.History).ForEach(x => TournamentHistory.Add(x));
-
     }
-
     [RelayCommand]
     public void DeleteHistoryItem(Tournament t){
         hw.RemoveFromHistory(t);
         RefreshHistoryCommand.Execute(null);
-
-        
+    }
+    public void ResetFormInputs(){
+        TournamentName = String.Empty;
+        TournamentDate = new DateTime();
+        TournamentTables = 3;
+        TournamentLocation = String.Empty;
+    }
+    private List<int> NewTables(){
+        List<int> tables = new List<int>();
+        for(int i =1; i <= TournamentTables; i++){
+            tables.Add(i);
+        }
+        return tables;
     }
 }

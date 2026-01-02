@@ -23,7 +23,7 @@ public partial class MainViewModel: ViewModelBase
         this.HomeView = homeView;
         this.CategoryPrepView = categoryView;
 
-        HomeView.TournamentCreated += OnTournamentCreated;
+        HomeView.TournamentPicked += OnTournamentCreated;
 
         CurrentView = HomeView;
         CategoryPrepView.GoBack += GoToHome;
