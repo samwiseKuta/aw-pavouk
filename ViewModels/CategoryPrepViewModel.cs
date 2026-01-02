@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Models;
@@ -16,13 +15,19 @@ public partial class CategoryPrepViewModel: ViewModelBase
 
     [ObservableProperty]
     private ObservableCollection<Bracket> _createdBrackets  = new();
-    public HistoryWriter hw;
+    public IHistoryService hw;
 
     public bool BracketsEmpty => CreatedBrackets.Count == 0;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CreatedBrackets))]
     private Tournament _selectedTournament;
+
+    [ObservableProperty]
+    private bool _currentlyEditing;
+
+    [ObservableProperty]
+    private bool _menuVisible = false;
 
 
     [ObservableProperty]
@@ -61,6 +66,8 @@ public partial class CategoryPrepViewModel: ViewModelBase
                 return;
             }
             ResetFormInputs();
+            CurrentlyEditing = true;
+            MenuVisible = true;
             EditingBracketName = SelectedBracket.Name;
             EditingBracketType = SelectedBracket.Elimination ?? "Double Elimination";
             FlushAndFillCompetitors(SelectedBracket.Competitors);
@@ -80,7 +87,9 @@ public partial class CategoryPrepViewModel: ViewModelBase
 
     public event Action GoBack;
 
-    public CategoryPrepViewModel(HistoryWriter hw){
+    public event Action<Tournament> BeginTournament;
+
+    public CategoryPrepViewModel(HistoryWriterService hw){
         this.hw = hw;
         CreatedBrackets.CollectionChanged +=  (_,_) =>
             OnPropertyChanged(nameof(BracketsEmpty));
@@ -105,8 +114,14 @@ public partial class CategoryPrepViewModel: ViewModelBase
     }
     [RelayCommand]
     public void NewCategory(){
+        if(MenuVisible && CurrentlyEditing is false){
+            MenuVisible = false;
+            return;
+        }
+        MenuVisible = true;
         SelectedBracket = null;
         ResetFormInputs();
+        CurrentlyEditing = false;
 
     }
     [RelayCommand(CanExecute =nameof(CanExecuteCreate))]
@@ -146,6 +161,7 @@ public partial class CategoryPrepViewModel: ViewModelBase
 
     [RelayCommand]
     public void Begin(){
+        BeginTournament.Invoke(SelectedTournament);
     }
     [RelayCommand]
     public void DeleteCategoryItem(Bracket b){

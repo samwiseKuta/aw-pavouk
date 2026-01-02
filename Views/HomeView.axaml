@@ -30,7 +30,6 @@
                 <Button Grid.Column="1" 
                     HorizontalAlignment="Right"
                     Command="{Binding InvokeTournamentPickedCommand}"
-                    IsVisible="{Binding IsTournamentSelected}"
                     Opacity="{Binding IsTournamentSelected}"
                     >
                          <StackPanel Orientation="Horizontal">

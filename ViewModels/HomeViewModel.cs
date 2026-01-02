@@ -13,7 +13,7 @@ namespace ViewModels;
 public partial class HomeViewModel: ViewModelBase
 {
 
-    public HistoryWriter hw;
+    public IHistoryService historyService;
 
 
     [ObservableProperty]
@@ -21,6 +21,7 @@ public partial class HomeViewModel: ViewModelBase
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsTournamentSelected))]
+    [NotifyCanExecuteChangedFor(nameof(InvokeTournamentPickedCommand))]
     private Tournament? _selectedTournament;
 
     partial void OnSelectedTournamentChanged(Tournament? value){
@@ -59,8 +60,8 @@ public partial class HomeViewModel: ViewModelBase
 
     public event Action<Tournament> TournamentPicked;
 
-    public HomeViewModel(HistoryWriter hw){
-        this.hw = hw;
+    public HomeViewModel(HistoryWriterService hw){
+        this.historyService = hw;
         RefreshHistoryCommand.Execute(null);
     }
 
@@ -89,11 +90,11 @@ public partial class HomeViewModel: ViewModelBase
                 Tables = NewTables(),
                 Date = TournamentDate
         };
-        hw.SaveToHistory(newTournament);
+        historyService.SaveToHistory(newTournament);
         RefreshHistoryCommand.Execute(null);
         SelectedTournament = newTournament;
         ResetFormInputs();
-        InvokeTournamentPicked();
+        InvokeTournamentPickedCommand.Execute(null);
     }
     [RelayCommand]
     public void SaveTournament(){
@@ -101,7 +102,7 @@ public partial class HomeViewModel: ViewModelBase
         SelectedTournament.Date = TournamentDate;
         SelectedTournament.Location = TournamentLocation;
         SelectedTournament.Tables = NewTables();
-        hw.SaveToHistory(SelectedTournament);
+        historyService.SaveToHistory(SelectedTournament);
         SelectedTournament = null;
         CurrentlyEditing=false;
         ResetFormInputs();
@@ -131,11 +132,11 @@ public partial class HomeViewModel: ViewModelBase
         ResetFormInputs();
         SelectedTournament=null;
         TournamentHistory.Clear();
-        new List<Tournament>(hw.History).ForEach(x => TournamentHistory.Add(x));
+        new List<Tournament>(historyService.GetHistory()).ForEach(x => TournamentHistory.Add(x));
     }
     [RelayCommand]
     public void DeleteHistoryItem(Tournament t){
-        hw.RemoveFromHistory(t);
+        historyService.RemoveFromHistory(t);
         RefreshHistoryCommand.Execute(null);
     }
     public void ResetFormInputs(){

@@ -3,6 +3,56 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="App.ControlFightsView">
-  Welcome to Avalonia!
+    x:Class="Views.ControlFightsView"
+    xmlns:local="using:App"
+    xmlns:vm="clr-namespace:ViewModels"
+    xmlns:view="clr-namespace:Views"
+    x:DataType="vm:ControlFightsViewModel"
+    >
+    <Grid ColumnDefinitions="auto,*">
+        <Grid Grid.Column="0" RowDefinitions="auto,*,auto,auto,auto">
+            <StackPanel Grid.Row="0">
+                <TextBlock Text="Placeholder"/>
+                <TextBlock Text="Placeholder"/>
+                <TextBlock Text="Placeholder"/>
+                <TextBlock Text="Placeholder"/>
+            </StackPanel>
+                <Button 
+                    Grid.Row="1"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    >
+                    <Border Classes="AddBorder" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Vertical" Spacing="0">
+                            <TextBlock Classes="AddPrompt" Text="Start new category"/>
+                            <TextBlock Classes="Plus Icon">&#xE3D4;</TextBlock>
+                        </StackPanel>
+                    </Border>
+                </Button>
+            <StackPanel Grid.Row="2">
+                <TextBlock Text="Placeholder"/>
+                <TextBlock Text="Placeholder"/>
+            </StackPanel>
+            <StackPanel Grid.Row="3">
+                <TextBlock Text="Placeholder"/>
+            </StackPanel>
+            <Button 
+                Grid.Row="4"
+                Command="{Binding BackCommand}"
+                VerticalAlignment="Bottom">
+                <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal">
+                    <Label Classes="" Content="&#xE523;"/>
+                    <TextBlock Text="Back"/>
+                </StackPanel> 
+            </Button>
+        </Grid>
+        <Grid Grid.Column="1" RowDefinitions="auto,*">
+            <StackPanel Grid.Row="0" Orientation="Vertical">
+                <TextBlock Text="Table 1"/>
+                <TextBlock Text="Juniors - Right"/>
+                <TextBlock Text="Double Elimination"/>
+            </StackPanel>
+            <Rectangle Grid.Row="1" />
+        </Grid>
+    </Grid>
 </UserControl>

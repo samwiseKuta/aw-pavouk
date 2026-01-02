@@ -31,13 +31,21 @@ public partial class App : Application
             }
 
 
-            HistoryWriter historyWriter = new HistoryWriter("history.json");
+            HistoryWriterService historyWriter = new HistoryWriterService("history.json");
+            WindowOpenerService windowOpener = new WindowOpenerService();
 
             HomeViewModel homeView = new HomeViewModel(historyWriter);
             CategoryPrepViewModel categoryView= new CategoryPrepViewModel(historyWriter);
+            DisplayFightsViewModel displayView = new DisplayFightsViewModel();
+            ControlFightsViewModel controlView = new ControlFightsViewModel(displayView,windowOpener);
 
 
-            MainViewModel mainView = new MainViewModel(homeView,categoryView);
+            MainViewModel mainView = new MainViewModel(
+                    homeView,
+                    categoryView,
+                    displayView,
+                    controlView
+                    );
             desktop.MainWindow = new MainView(){
                 DataContext = mainView
             };

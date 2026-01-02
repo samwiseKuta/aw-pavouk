@@ -3,7 +3,69 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="App.DisplayFightsView"
-        Title="DisplayFightsView">
-  Welcome to Avalonia!
+    xmlns:local="using:App"
+    xmlns:vm="clr-namespace:ViewModels"
+    xmlns:view="clr-namespace:Views"
+    x:Class="Views.DisplayFightsView"
+    x:DataType="vm:DisplayFightsViewModel"
+    Title="{Binding SelectedTournament.Name}">
+    <Grid RowDefinitions="auto,*">
+        <TextBlock  Grid.Row="0" Background="Red" Text="Fuck the government"/>
+        <TextBlock  Grid.Row="0" Text="{Binding SelectedTournament.Name}"/>
+        <StackPanel Margin="20">
+            <ItemsControl ItemsSource="{Binding SelectedTournament.Brackets}" >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Background="Red" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid RowDefinitions="auto,*,auto">
+                            <StackPanel Grid.Row="0" Orientation="Vertical">
+                                <TextBlock Text="Placeholder for table"/>
+                                <TextBlock Text="{Binding Name}"/>
+                            </StackPanel>
+                            <Grid Grid.Row="1" ColumnDefinitions="*,auto,*">
+                                <StackPanel Grid.Column="0">
+                                    <Rectangle/>
+                                    <TextBlock Text="Placeholder Name"/>
+                                </StackPanel>
+                                <Label Grid.Column="1" Content="VS"/>
+                                <StackPanel Grid.Column="2">
+                                    <Rectangle/>
+                                    <TextBlock Text="Placeholder Name"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid Grid.Row="2" ColumnDefinitions="*,auto,*">
+
+            <ItemsControl ItemsSource="{Binding Competitors}" >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="auto,*,auto">
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                                    <Rectangle />
+                                <TextBlock Text="Placeholder name"/>
+                            </StackPanel>
+                            <Label Grid.Column="1" Content="vs"/>
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                                    <Rectangle />
+                                <TextBlock Text="Placeholder name"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Grid>
 </Window>

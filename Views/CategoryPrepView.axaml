@@ -72,7 +72,6 @@
         </Grid>
 
     <Grid Grid.Column="1" RowDefinitions="auto,*">
-
             <Grid Grid.Row="0">
                 <Button 
                     Command="{Binding NewCategoryCommand}" 
@@ -99,7 +98,7 @@
                 </Button>
         </Grid>
 
-            <Grid Grid.Row="1" Grid.Column="1" RowDefinitions="auto,*" ColumnDefinitions="*,*">
+                                                   <Grid IsVisible="{Binding MenuVisible}" Grid.Row="1" Grid.Column="1" RowDefinitions="auto,*" ColumnDefinitions="*,*">
                 <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0">
                     <Label  Classes="FormLabel" Content="{Binding StateText}"/>
                     <TextBox  Text="{Binding EditingBracketName}" Classes="FormInput" Watermark="Senior Men 90+kg"/> 
@@ -141,21 +140,23 @@
                     Grid.Column="0"
                     Orientation="Horizontal"
                     >
-                    <Button
-                        Command="{Binding CreateCategoryCommand}"
-                        >
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Add"/>
-                            <Label Classes="Icon" Content="&#xE2F8;"/>
-                        </StackPanel>
+                <Button 
+                    Command="{Binding CreateCategoryCommand}"
+                    IsVisible="{Binding !CurrentlyEditing}"
+                    >
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Add Category"/>
+                        <Label Classes="Icon" Content="&#xE2F8;"/>
+                    </StackPanel>
                     </Button>
-                    <Button
-                        Command="{Binding SaveCategoryCommand}"
-                        >
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Save"/>
-                            <Label Classes="Icon" Content="&#xE248;"/>
-                        </StackPanel>
+                <Button 
+                    Command="{Binding SaveCategoryCommand}"
+                    IsVisible="{Binding CurrentlyEditing}"
+                    >
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Save changes"/>
+                        <Label Classes="Icon" Content="&#xE248;"/>
+                    </StackPanel>
                     </Button>
                 </StackPanel>
             <ListBox
