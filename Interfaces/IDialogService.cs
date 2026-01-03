@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Models;
 using ViewModels;
 
-namespace Services;
+namespace Interfaces;
 
 public interface IDialogService
 {

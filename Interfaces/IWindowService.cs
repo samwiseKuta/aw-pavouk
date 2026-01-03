@@ -1,6 +1,6 @@
 using ViewModels;
 
-namespace Services;
+namespace Interfaces;
 
 public interface IWindowService 
 {

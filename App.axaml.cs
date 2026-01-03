@@ -30,11 +30,11 @@ public partial class App : Application
                 BindingPlugins.DataValidators.Remove(plugin);
             }
 
+            MainViewModel mainView;
 
             HistoryWriterService historyWriter = new HistoryWriterService("history.json");
             WindowOpenerService windowOpener = new WindowOpenerService();
-            DialogViewModel dialog = new DialogViewModel();
-            DialogOpenerService dialogOpener = new DialogOpenerService(dialog);
+            DialogOpenerService dialogOpener = new DialogOpenerService(){DialogHost=mainView};
 
             HomeViewModel homeView = new HomeViewModel(historyWriter);
             CategoryPrepViewModel categoryView= new CategoryPrepViewModel(historyWriter);
@@ -42,14 +42,15 @@ public partial class App : Application
             ControlFightsViewModel controlView = new ControlFightsViewModel(displayView);
 
 
-            MainViewModel mainView = new MainViewModel(
+            mainView = new MainViewModel(
                     homeView,
                     categoryView,
                     displayView,
                     controlView,
-                    windowOpener,
-                    dialog
+                    windowOpener
                     );
+            dialogOpener
+
             desktop.MainWindow = new MainView(){
                 DataContext = mainView
             };

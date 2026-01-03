@@ -1,20 +1,20 @@
-using System;
-using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Interfaces;
 using Models;
-using Services;
 
 namespace ViewModels;
 
 
-public partial class MainViewModel: ViewModelBase
+public partial class MainViewModel: ViewModelBase, IDialogHost
 {
 
     [ObservableProperty]
     private ViewModelBase _currentView;
 
+    [NotifyPropertyChangedFor(nameof(Dialog))]
     [ObservableProperty]
     private DialogViewModel _currentDialog;
+    public DialogViewModel Dialog { get => CurrentDialog; set => CurrentDialog = value; }
 
     public IWindowService WindowService;
 
@@ -24,13 +24,13 @@ public partial class MainViewModel: ViewModelBase
     public DisplayFightsViewModel DisplayFightsView;
     public ControlFightsViewModel ControlFightsView;
 
+
     public MainViewModel(
             HomeViewModel homeView,
             CategoryPrepViewModel categoryView,
             DisplayFightsViewModel displayFightsView,
             ControlFightsViewModel controlFightsView,
-            IWindowService windowService,
-            DialogViewModel dialogReference
+            IWindowService windowService
             )
     {
         this.HomeView = homeView;
@@ -38,7 +38,6 @@ public partial class MainViewModel: ViewModelBase
         this.DisplayFightsView = displayFightsView;
         this.ControlFightsView = controlFightsView;
         this.WindowService = windowService;
-        this.CurrentDialog = dialogReference;
 
         HomeView.TournamentPicked += OnTournamentCreated;
         CategoryPrepView.GoBack += GoToHome;

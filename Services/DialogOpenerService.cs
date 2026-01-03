@@ -1,18 +1,16 @@
+using Interfaces;
 using ViewModels;
 
 namespace Services;
 
 public class DialogOpenerService : IDialogService
 {
-    private DialogViewModel DialogReference;
+    public IDialogHost DialogHost {get;set;}
 
     public void OpenNewDialogWindow(DialogViewModel dialog)
     {
-        DialogReference = dialog;
-        DialogReference.Show();
+        DialogHost.Dialog = dialog;
+        DialogHost.Dialog.Show();
     }
 
-    public DialogOpenerService(DialogViewModel dialogReference){
-        this.DialogReference = dialogReference;
-    }
 }
