@@ -4,7 +4,5 @@ namespace Services;
 
 public interface IWindowService 
 {
-    public void OpenNewWindow(ViewModelBase newWindow){
-
-    }
+    public void OpenNewWindow(ViewModelBase newWindow);
 }

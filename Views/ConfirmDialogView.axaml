@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:ViewModels"
+    x:DataType="vm:ConfirmDialogViewModel"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    Foreground="{DynamicResource PrimaryFg}"
+    MinWidth="300"
+    Background="Transparent"
+    x:Class="Views.ConfirmDialogView">
+
+    <Border
+        BorderBrush="Green"
+        BorderThickness="2"
+        CornerRadius="20"
+        ClipToBounds="True"
+        Margin="10"
+        >
+        <Border.Effect>
+            <DropShadowEffect Color="Orange"/>
+        </Border.Effect>
+    <StackPanel>
+    <StackPanel Orientation="Horizontal">
+        <Label Content="{Binding IconText}"/>
+        <TextBlock Text="{Binding Title}"/>
+    </StackPanel>
+        <TextBlock Text="{Binding Message}"/>
+        <StackPanel Orientation="Horizontal">
+                <Button
+                    Command="{Binding ConfirmCommand}"
+                    >
+                <TextBlock Text="{Binding ConfirmText}"/>
+            </Button>
+                <Button
+                    Command="{Binding CancelCommand}"
+                    >
+                <TextBlock Text="{Binding CancelText}"/>
+            </Button>
+
+        </StackPanel>
+
+    </StackPanel>
+    </Border>
+
+</UserControl>

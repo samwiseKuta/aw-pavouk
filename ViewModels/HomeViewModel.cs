@@ -14,6 +14,7 @@ public partial class HomeViewModel: ViewModelBase
 {
 
     public IHistoryService historyService;
+    public IDialogService dialogService;
 
 
     [ObservableProperty]
@@ -26,6 +27,7 @@ public partial class HomeViewModel: ViewModelBase
 
     partial void OnSelectedTournamentChanged(Tournament? value){
         if(value is null) return;
+        dialogService.OpenNewDialogWindow(new ConfirmDialogViewModel());
         TournamentSelectedCommand.Execute(value);
     }
 

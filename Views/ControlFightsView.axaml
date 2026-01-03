@@ -11,12 +11,31 @@
     >
     <Grid ColumnDefinitions="auto,*">
         <Grid Grid.Column="0" RowDefinitions="auto,*,auto,auto,auto">
-            <StackPanel Grid.Row="0">
-                <TextBlock Text="Placeholder"/>
-                <TextBlock Text="Placeholder"/>
-                <TextBlock Text="Placeholder"/>
-                <TextBlock Text="Placeholder"/>
-            </StackPanel>
+                <ListBox Grid.Row="0"
+                    ItemsSource="{Binding StartedCategories}"
+                    SelectedItem="{Binding SelectedCategory}"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto">
+
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel
+                                Orientation="Vertical"
+                                Spacing="7"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                                       <Grid RowDefinitions="auto,auto">
+                            <TextBlock Grid.Row="0" Text="{Binding Table}"/>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <Label Classes="Icon" Content="&#xE01A;"/>
+                                <TextBlock Text="{Binding Bracket.Name}" />
+                            </StackPanel>
+                        </Grid>
+
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
                 <Button 
                     Grid.Row="1"
                     VerticalAlignment="Top"
@@ -29,13 +48,42 @@
                         </StackPanel>
                     </Border>
                 </Button>
-            <StackPanel Grid.Row="2">
-                <TextBlock Text="Placeholder"/>
-                <TextBlock Text="Placeholder"/>
-            </StackPanel>
-            <StackPanel Grid.Row="3">
-                <TextBlock Text="Placeholder"/>
-            </StackPanel>
+                <ListBox Grid.Row="2"
+                    ItemsSource="{Binding RemainingTables}"
+                    SelectedItem=""
+                    ScrollViewer.VerticalScrollBarVisibility="Auto">
+
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel
+                                Orientation="Vertical"
+                                Spacing="7"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <ListBox Grid.Row="3"
+                    ItemsSource="{Binding RemainingCategories}"
+                    SelectedItem=""
+                    ScrollViewer.VerticalScrollBarVisibility="Auto">
+
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel
+                                Orientation="Vertical"
+                                Spacing="7"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             <Button 
                 Grid.Row="4"
                 Command="{Binding BackCommand}"
@@ -46,10 +94,10 @@
                 </StackPanel> 
             </Button>
         </Grid>
-        <Grid Grid.Column="1" RowDefinitions="auto,*">
+        <Grid Grid.Column="1" HorizontalAlignment="Center" RowDefinitions="auto,*">
             <StackPanel Grid.Row="0" Orientation="Vertical">
-                <TextBlock Text="Table 1"/>
-                <TextBlock Text="Juniors - Right"/>
+                <TextBlock  Text="Table 1"/>
+                <TextBlock  Text="Juniors - Right"/>
                 <TextBlock Text="Double Elimination"/>
             </StackPanel>
             <Rectangle Grid.Row="1" />

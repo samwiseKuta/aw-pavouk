@@ -7,12 +7,22 @@
     x:DataType="vm:MainViewModel"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="App.MainView"
-    Title="App"
+    Title="aw-spider"
     Width="1400" Height="750"
     MinWidth="1400" MinHeight="750"
     WindowStartupLocation="CenterScreen"
     >
 
-    <ContentControl Content="{Binding CurrentView}" />
+    <Grid>
+        <ContentControl Content="{Binding CurrentView}" />
+        <Border Background="Black" BorderThickness="2" 
+            Opacity="0.4" 
+            IsVisible="{Binding CurrentDialog.IsDialogVisible}">
+            <ContentControl 
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="{Binding CurrentDialog}"/>
+        </Border>
+    </Grid>
 
 </Window>

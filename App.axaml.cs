@@ -33,18 +33,22 @@ public partial class App : Application
 
             HistoryWriterService historyWriter = new HistoryWriterService("history.json");
             WindowOpenerService windowOpener = new WindowOpenerService();
+            DialogViewModel dialog = new DialogViewModel();
+            DialogOpenerService dialogOpener = new DialogOpenerService(dialog);
 
             HomeViewModel homeView = new HomeViewModel(historyWriter);
             CategoryPrepViewModel categoryView= new CategoryPrepViewModel(historyWriter);
             DisplayFightsViewModel displayView = new DisplayFightsViewModel();
-            ControlFightsViewModel controlView = new ControlFightsViewModel(displayView,windowOpener);
+            ControlFightsViewModel controlView = new ControlFightsViewModel(displayView);
 
 
             MainViewModel mainView = new MainViewModel(
                     homeView,
                     categoryView,
                     displayView,
-                    controlView
+                    controlView,
+                    windowOpener,
+                    dialog
                     );
             desktop.MainWindow = new MainView(){
                 DataContext = mainView
