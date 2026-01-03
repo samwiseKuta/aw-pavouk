@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Interfaces;
 using Models;
 using Services;
 
@@ -12,10 +13,11 @@ namespace ViewModels;
 public partial class CategoryPrepViewModel: ViewModelBase
 {
 
+    public IHistoryService historyWriter;
+    public IDialogService dialogOpener;
 
     [ObservableProperty]
     private ObservableCollection<Bracket> _createdBrackets  = new();
-    public IHistoryService hw;
 
     public bool BracketsEmpty => CreatedBrackets.Count == 0;
 
@@ -89,8 +91,8 @@ public partial class CategoryPrepViewModel: ViewModelBase
 
     public event Action<Tournament> BeginTournament;
 
-    public CategoryPrepViewModel(HistoryWriterService hw){
-        this.hw = hw;
+    public CategoryPrepViewModel(IHistoryService historyService,IDialogService dialogService){
+        this.historyWriter = historyService;
         CreatedBrackets.CollectionChanged +=  (_,_) =>
             OnPropertyChanged(nameof(BracketsEmpty));
     }
@@ -135,7 +137,7 @@ public partial class CategoryPrepViewModel: ViewModelBase
         newList.Add(newBracket);
         FlushAndFillBrackets(newList);
         SelectedTournament.Brackets.Add(newBracket);
-        hw.SaveToHistory(SelectedTournament);
+        historyWriter.SaveToHistory(SelectedTournament);
         ResetFormInputs();
     }
 
@@ -154,7 +156,7 @@ public partial class CategoryPrepViewModel: ViewModelBase
             changedBracket.Elimination = EditingBracketType;
             CreatedBrackets[i] = changedBracket;
             SelectedTournament.Brackets[i] = changedBracket;
-            hw.SaveToHistory(SelectedTournament);
+            historyWriter.SaveToHistory(SelectedTournament);
             ResetFormInputs();
         }
     }
@@ -166,7 +168,7 @@ public partial class CategoryPrepViewModel: ViewModelBase
     [RelayCommand]
     public void DeleteCategoryItem(Bracket b){
         SelectedTournament.Brackets.Remove(b);
-        hw.SaveToHistory(SelectedTournament);
+        historyWriter.SaveToHistory(SelectedTournament);
 
         FlushAndFillBrackets(SelectedTournament.Brackets);
 
@@ -177,7 +179,7 @@ public partial class CategoryPrepViewModel: ViewModelBase
         EditingCompetitorList.Remove(c);
     }
 
-    public void FlushAndFillBrackets(List<Bracket> brackets){
+    public void FlushAndFillBrackets(List<Bracket>? brackets){
         if(brackets is null) return;
         brackets.Sort();
         CreatedBrackets.Clear();

@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.Generic;
 using Services;
+using Interfaces;
 
 namespace ViewModels;
 
@@ -13,8 +14,8 @@ namespace ViewModels;
 public partial class HomeViewModel: ViewModelBase
 {
 
-    public IHistoryService historyService;
-    public IDialogService dialogService;
+    public IHistoryService HistoryService;
+    public IDialogService DialogService;
 
 
     [ObservableProperty]
@@ -27,7 +28,7 @@ public partial class HomeViewModel: ViewModelBase
 
     partial void OnSelectedTournamentChanged(Tournament? value){
         if(value is null) return;
-        dialogService.OpenNewDialogWindow(new ConfirmDialogViewModel());
+        DialogService.OpenNewDialogWindow(new ConfirmDialogViewModel());
         TournamentSelectedCommand.Execute(value);
     }
 
@@ -62,8 +63,9 @@ public partial class HomeViewModel: ViewModelBase
 
     public event Action<Tournament> TournamentPicked;
 
-    public HomeViewModel(HistoryWriterService hw){
-        this.historyService = hw;
+    public HomeViewModel(IHistoryService historyService,IDialogService dialogService){
+        this.HistoryService = historyService;
+        this.DialogService = dialogService;
         RefreshHistoryCommand.Execute(null);
     }
 
@@ -92,7 +94,7 @@ public partial class HomeViewModel: ViewModelBase
                 Tables = NewTables(),
                 Date = TournamentDate
         };
-        historyService.SaveToHistory(newTournament);
+        HistoryService.SaveToHistory(newTournament);
         RefreshHistoryCommand.Execute(null);
         SelectedTournament = newTournament;
         ResetFormInputs();
@@ -104,7 +106,7 @@ public partial class HomeViewModel: ViewModelBase
         SelectedTournament.Date = TournamentDate;
         SelectedTournament.Location = TournamentLocation;
         SelectedTournament.Tables = NewTables();
-        historyService.SaveToHistory(SelectedTournament);
+        HistoryService.SaveToHistory(SelectedTournament);
         SelectedTournament = null;
         CurrentlyEditing=false;
         ResetFormInputs();
@@ -134,11 +136,11 @@ public partial class HomeViewModel: ViewModelBase
         ResetFormInputs();
         SelectedTournament=null;
         TournamentHistory.Clear();
-        new List<Tournament>(historyService.GetHistory()).ForEach(x => TournamentHistory.Add(x));
+        new List<Tournament>(HistoryService.GetHistory()).ForEach(x => TournamentHistory.Add(x));
     }
     [RelayCommand]
     public void DeleteHistoryItem(Tournament t){
-        historyService.RemoveFromHistory(t);
+        HistoryService.RemoveFromHistory(t);
         RefreshHistoryCommand.Execute(null);
     }
     public void ResetFormInputs(){

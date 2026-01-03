@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Interfaces;
 using Models;
 using Services;
 
@@ -42,6 +43,8 @@ public partial class ControlFightsViewModel: ViewModelBase
     private ObservableCollection<Bracket> _remainingCategories = new (new List<Bracket>());
 
     public DisplayFightsViewModel DisplayViewModel;
+    public IDialogService DialogOpener;
+    public IHistoryService HistoryWriter;
 
 
     public event Action GoBack;
@@ -64,7 +67,16 @@ public partial class ControlFightsViewModel: ViewModelBase
             
         }
 
-    public ControlFightsViewModel(DisplayFightsViewModel vm){
+    public ControlFightsViewModel(
+            DisplayFightsViewModel vm,
+            IHistoryService historyService,
+            IDialogService dialogService)
+    {
+        this.DisplayViewModel = vm;
+        this.DialogOpener = dialogService;
+        this.HistoryWriter = historyService;
+
+
     }
 
 

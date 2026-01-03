@@ -17,12 +17,13 @@
         <ContentControl Content="{Binding CurrentView}" />
         <Border Background="Black" BorderThickness="2" 
             Opacity="0.4" 
-            IsVisible="{Binding CurrentDialog.IsDialogVisible}">
+            IsVisible="{Binding CurrentDialog.IsDialogVisible}"/>
             <ContentControl 
+            Opacity="1"
+            IsVisible="{Binding CurrentDialog.IsDialogVisible}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Content="{Binding CurrentDialog}"/>
-        </Border>
     </Grid>
 
 </Window>

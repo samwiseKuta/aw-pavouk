@@ -13,7 +13,7 @@ public partial class MainViewModel: ViewModelBase, IDialogHost
 
     [NotifyPropertyChangedFor(nameof(Dialog))]
     [ObservableProperty]
-    private DialogViewModel _currentDialog;
+    private DialogViewModel _currentDialog = new();
     public DialogViewModel Dialog { get => CurrentDialog; set => CurrentDialog = value; }
 
     public IWindowService WindowService;

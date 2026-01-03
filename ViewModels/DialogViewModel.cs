@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -14,8 +15,9 @@ public partial class DialogViewModel : ViewModelBase
     }
 
     public void Show(){
-        if(!closeTask.Task.IsCompleted) return;
-        closeTask = new TaskCompletionSource();
+        if(!closeTask.Task.IsCompleted){
+            closeTask = new TaskCompletionSource();
+        }
         IsDialogVisible= true;
     }
 
