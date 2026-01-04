@@ -59,7 +59,6 @@ public partial class MainViewModel: ViewModelBase, IDialogHost
     }
 
     private void OnTournamentCreated(Tournament tournament){
-        CurrentDialog.IsDialogVisible=true;
         CategoryPrepView.SelectedTournament = tournament;
         CategoryPrepView.FlushAndFillBrackets(tournament.Brackets);
         GoToCategories();

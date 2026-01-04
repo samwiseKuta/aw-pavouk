@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Interfaces;
 using ViewModels;
 
@@ -14,4 +15,10 @@ public class DialogOpenerService : IDialogService
         DialogHost.Dialog.Show();
     }
 
+    public async Task OpenNewDialogWindowAsync(DialogViewModel dialog)
+    {
+        DialogHost.Dialog = dialog;
+        DialogHost.Dialog.Show();
+        await DialogHost.Dialog.AwaitResolution();
+    }
 }

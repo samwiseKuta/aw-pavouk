@@ -63,8 +63,6 @@ public partial class ControlFightsViewModel: ViewModelBase
             t.Tables.ForEach(table => RemainingTables.Add(table));
             t.Brackets.ForEach(bracket => RemainingCategories.Add(bracket));
 
-            StartCategory(3,RemainingCategories[0]);
-            
         }
 
     public ControlFightsViewModel(

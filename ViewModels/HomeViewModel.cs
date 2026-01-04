@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.Generic;
 using Services;
 using Interfaces;
+using System.Threading.Tasks;
 
 namespace ViewModels;
 
@@ -28,7 +29,6 @@ public partial class HomeViewModel: ViewModelBase
 
     partial void OnSelectedTournamentChanged(Tournament? value){
         if(value is null) return;
-        DialogService.OpenNewDialogWindow(new ConfirmDialogViewModel());
         TournamentSelectedCommand.Execute(value);
     }
 
@@ -139,7 +139,14 @@ public partial class HomeViewModel: ViewModelBase
         new List<Tournament>(HistoryService.GetHistory()).ForEach(x => TournamentHistory.Add(x));
     }
     [RelayCommand]
-    public void DeleteHistoryItem(Tournament t){
+    public async Task DeleteHistoryItem(Tournament t){
+        ConfirmDialogViewModel confirmDialog = new ConfirmDialogViewModel(){
+            Title=$"Delete {t.Name}?",
+            Message="Delete tournament from history?"
+        };
+        DialogService.OpenNewDialogWindow(confirmDialog);
+        await confirmDialog.AwaitResolution();
+        if(!confirmDialog.Confirmed) return;
         HistoryService.RemoveFromHistory(t);
         RefreshHistoryCommand.Execute(null);
     }

@@ -11,35 +11,53 @@
     x:Class="Views.ConfirmDialogView">
 
     <Border
-        Background="Orange"
-        BorderBrush="Green"
-        BorderThickness="2"
+        Background="White"
         CornerRadius="20"
         ClipToBounds="True"
         Margin="10"
         >
         <Border.Effect>
-            <DropShadowEffect Color="Orange"/>
+            <DropShadowEffect Color="{DynamicResource PrimaryBg}"/>
         </Border.Effect>
     <StackPanel>
+            <Border
+                Padding="10"
+            >
     <StackPanel Orientation="Horizontal">
-        <Label Content="{Binding IconText}"/>
+        <Label Classes ="Icon" Content="{Binding IconText}"/>
         <TextBlock Text="{Binding Title}"/>
     </StackPanel>
-        <TextBlock Text="{Binding Message}"/>
-        <StackPanel Orientation="Horizontal">
-                <Button
-                    Command="{Binding ConfirmCommand}"
+            </Border>
+            <TextBlock Padding="10" 
+                HorizontalAlignment="Center" 
+                TextWrapping="Wrap" 
+                FontSize="25"
+                Text="{Binding Message}"/>
+            <Border
+                >
+                <Grid ColumnDefinitions="*,*" 
                     >
-                <TextBlock Text="{Binding ConfirmText}"/>
+                <Button Grid.Column="0"
+                    Command="{Binding ConfirmCommand}"
+                        HorizontalAlignment="Stretch"
+                    >
+                        <TextBlock 
+
+                            HorizontalAlignment="Center"
+                            Text="{Binding ConfirmText}"/>
             </Button>
                 <Button
+                        Grid.Column="1"
+                        HorizontalAlignment="Stretch"
                     Command="{Binding CancelCommand}"
                     >
-                <TextBlock Text="{Binding CancelText}"/>
+                        <TextBlock 
+                            HorizontalAlignment="Center"
+                            Text="{Binding CancelText}"/>
             </Button>
 
-        </StackPanel>
+        </Grid>
+            </Border>
 
     </StackPanel>
     </Border>

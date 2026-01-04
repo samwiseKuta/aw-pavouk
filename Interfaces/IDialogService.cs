@@ -9,4 +9,5 @@ namespace Interfaces;
 public interface IDialogService
 {
     public void OpenNewDialogWindow(DialogViewModel dialog);
+    public Task OpenNewDialogWindowAsync(DialogViewModel dialog);
 }

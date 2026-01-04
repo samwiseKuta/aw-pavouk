@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Interfaces;
@@ -13,8 +14,8 @@ namespace ViewModels;
 public partial class CategoryPrepViewModel: ViewModelBase
 {
 
-    public IHistoryService historyWriter;
-    public IDialogService dialogOpener;
+    public IHistoryService HistoryWriter;
+    public IDialogService DialogOpener;
 
     [ObservableProperty]
     private ObservableCollection<Bracket> _createdBrackets  = new();
@@ -92,7 +93,8 @@ public partial class CategoryPrepViewModel: ViewModelBase
     public event Action<Tournament> BeginTournament;
 
     public CategoryPrepViewModel(IHistoryService historyService,IDialogService dialogService){
-        this.historyWriter = historyService;
+        this.DialogOpener = dialogService;
+        this.HistoryWriter = historyService;
         CreatedBrackets.CollectionChanged +=  (_,_) =>
             OnPropertyChanged(nameof(BracketsEmpty));
     }
@@ -137,7 +139,7 @@ public partial class CategoryPrepViewModel: ViewModelBase
         newList.Add(newBracket);
         FlushAndFillBrackets(newList);
         SelectedTournament.Brackets.Add(newBracket);
-        historyWriter.SaveToHistory(SelectedTournament);
+        HistoryWriter.SaveToHistory(SelectedTournament);
         ResetFormInputs();
     }
 
@@ -156,7 +158,7 @@ public partial class CategoryPrepViewModel: ViewModelBase
             changedBracket.Elimination = EditingBracketType;
             CreatedBrackets[i] = changedBracket;
             SelectedTournament.Brackets[i] = changedBracket;
-            historyWriter.SaveToHistory(SelectedTournament);
+            HistoryWriter.SaveToHistory(SelectedTournament);
             ResetFormInputs();
         }
     }
@@ -166,9 +168,17 @@ public partial class CategoryPrepViewModel: ViewModelBase
         BeginTournament.Invoke(SelectedTournament);
     }
     [RelayCommand]
-    public void DeleteCategoryItem(Bracket b){
+    public async Task DeleteCategoryItem(Bracket b){
+        ConfirmDialogViewModel confirm = new ConfirmDialogViewModel(){
+            Title="Delete category?",
+            Message="Delete category from history"
+
+            };
+        DialogOpener.OpenNewDialogWindow(confirm);
+        await confirm.AwaitResolution();
+        if(!confirm.Confirmed) return;
         SelectedTournament.Brackets.Remove(b);
-        historyWriter.SaveToHistory(SelectedTournament);
+        HistoryWriter.SaveToHistory(SelectedTournament);
 
         FlushAndFillBrackets(SelectedTournament.Brackets);
 

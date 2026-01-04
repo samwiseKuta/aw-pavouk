@@ -10,7 +10,7 @@ public partial class DialogViewModel : ViewModelBase
 
     protected TaskCompletionSource closeTask = new TaskCompletionSource();
 
-    public async Task WaitAsync(){
+    public async Task AwaitResolution(){
         await closeTask.Task;
     }
 
