@@ -1,0 +1,95 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Class="Views.StartCategoryDialogView"
+    xmlns:vm="clr-namespace:ViewModels"
+    x:DataType="vm:StartCategoryDialogViewModel"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    Foreground="{DynamicResource PrimaryFg}"
+    MinWidth="300"
+    Background="Transparent"
+    >
+
+
+    <Border
+        Background="White"
+        CornerRadius="20"
+        ClipToBounds="True"
+        Margin="10"
+        >
+        <Border.Effect>
+            <DropShadowEffect Color="{DynamicResource PrimaryBg}"/>
+        </Border.Effect>
+        <StackPanel>
+            <Border
+                Padding="10"
+                >
+                <StackPanel Orientation="Horizontal">
+                    <Label Classes ="Icon" Content="{Binding IconText}"/>
+                    <TextBlock Text="{Binding Title}"/>
+                </StackPanel>
+            </Border>
+            <TextBlock Padding="10" 
+                HorizontalAlignment="Center" 
+                TextWrapping="Wrap" 
+                FontSize="25"
+                Text="{Binding Message}"/>
+            <Border>
+                <StackPanel>
+                <Grid ColumnDefinitions="*,*">
+                    <ComboBox 
+                        Grid.Column="0"
+                        MaxDropDownHeight="300"
+                        ItemsSource="{Binding BracketOptions}"
+                            SelectedItem="{Binding SelectedBracket}"
+                            >
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <ComboBox 
+                        Grid.Column="1"
+                        MaxDropDownHeight="300"
+                        ItemsSource="{Binding TableOptions}"
+                        SelectedItem="{Binding SelectedTable}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Table "/>
+                                    <TextBlock Text="{Binding}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </Grid>
+                <Grid ColumnDefinitions="2*,*">
+                    <Button Grid.Column="0"
+                        Command="{Binding ConfirmCommand}"
+                        HorizontalAlignment="Stretch"
+                        >
+                        <TextBlock 
+
+                            HorizontalAlignment="Center"
+                            Text="{Binding ConfirmText}"/>
+                    </Button>
+                    <Button
+                        Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding CancelCommand}"
+                        >
+                        <TextBlock 
+                            HorizontalAlignment="Center"
+                            Text="{Binding CancelText}"/>
+                    </Button>
+
+                </Grid>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </Border>
+
+</UserControl>

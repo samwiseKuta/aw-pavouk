@@ -2,11 +2,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace App;
+namespace Views;
 
-public partial class StartCategoryDialog : UserControl
+public partial class StartCategoryDialogView : UserControl
 {
-    public StartCategoryDialog()
+    public StartCategoryDialogView()
     {
         InitializeComponent();
     }

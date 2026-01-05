@@ -114,7 +114,7 @@
         <Setter Property="TextBlock.Foreground" Value="{DynamicResource PrimaryFG}"></Setter>
     </Style>
     <Style Selector="Button.Open">
-        <Setter Property="Background" Value="Orange"></Setter>
+        <Setter Property="Background" Value="{DynamicResource PrimaryBG}"></Setter>
     </Style>
 
     <Style Selector="Border.AddBorder">

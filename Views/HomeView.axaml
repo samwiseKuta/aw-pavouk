@@ -100,7 +100,7 @@
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1" RowDefinitions="auto,*" Classes="HistoryBlock">
-            <StackPanel Grid.Row ="0" Orientation="Horizontal" Background="Red">
+            <StackPanel Grid.Row ="0" Orientation="Horizontal">
                 <TextBlock Padding="28 0 0 0" >Tournament History </TextBlock>
                 <Label Classes="Icon">&#xE7B4;</Label>
                 <Button HorizontalAlignment="Right" Command="{Binding RefreshHistoryCommand}">

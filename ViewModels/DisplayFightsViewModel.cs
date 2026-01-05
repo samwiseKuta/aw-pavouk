@@ -16,4 +16,7 @@ public partial class DisplayFightsViewModel: ViewModelBase
     [ObservableProperty]
     private Tournament _selectedTournament;
 
+    [ObservableProperty]
+    private ObservableCollection<StartedCategory> _displayBrackets;
+
 }

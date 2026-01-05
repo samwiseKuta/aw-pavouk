@@ -26,7 +26,10 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                                        <Grid RowDefinitions="auto,auto">
-                            <TextBlock Grid.Row="0" Text="{Binding Table}"/>
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                <TextBlock Text="Table "/>
+                                <TextBlock Text="{Binding Table}"/>
+                            </StackPanel>
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
                                 <Label Classes="Icon" Content="&#xE01A;"/>
                                 <TextBlock Text="{Binding Bracket.Name}" />
@@ -40,6 +43,7 @@
                     Grid.Row="1"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Stretch"
+                Command="{Binding StartNewCategoryCommand}"
                     >
                     <Border Classes="AddBorder" HorizontalAlignment="Left">
                         <StackPanel Orientation="Vertical" Spacing="0">
@@ -96,9 +100,13 @@
         </Grid>
         <Grid Grid.Column="1" HorizontalAlignment="Center" RowDefinitions="auto,*">
             <StackPanel Grid.Row="0" Orientation="Vertical">
-                <TextBlock  Text="Table 1"/>
-                <TextBlock  Text="Juniors - Right"/>
-                <TextBlock Text="Double Elimination"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock  Text="Table "/>
+                    <TextBlock  Text="{Binding SelectedCategory.Table}"/>
+                    <TextBlock  Text="/"/>
+                    <TextBlock Text="{Binding SelectedCategory.Bracket.Elimination}"/>
+                </StackPanel>
+                <TextBlock  Text="{Binding SelectedCategory.Bracket.Name}"/>
             </StackPanel>
             <Rectangle Grid.Row="1" />
         </Grid>

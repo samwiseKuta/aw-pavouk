@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -15,18 +16,6 @@ public partial class ControlFightsViewModel: ViewModelBase
 {
 
 
-    public class StartedCategory{
-        
-        public int Table {get;set;}
-
-        public Bracket Bracket{get;set;}
-
-        public StartedCategory(int table, Bracket bracket){
-            Table = table;
-            Bracket = bracket;
-        }
-    }
-
     [ObservableProperty]
     private ObservableCollection<StartedCategory> _startedCategories= new ();
 
@@ -36,11 +25,20 @@ public partial class ControlFightsViewModel: ViewModelBase
     [ObservableProperty]
     private int _selectedStartedTable;
 
+    [NotifyCanExecuteChangedFor(nameof(StartNewCategoryCommand))]
+    [NotifyPropertyChangedFor(nameof(CanExecuteStartNewCategory))]
     [ObservableProperty]
     private ObservableCollection<int> _remainingTables = new (new List<int>());
 
+    [NotifyCanExecuteChangedFor(nameof(StartNewCategoryCommand))]
+    [NotifyPropertyChangedFor(nameof(CanExecuteStartNewCategory))]
     [ObservableProperty]
     private ObservableCollection<Bracket> _remainingCategories = new (new List<Bracket>());
+
+    public bool CanExecuteStartNewCategory => (
+            RemainingCategories.Count > 0 &&
+            RemainingTables.Count > 0
+            );
 
     public DisplayFightsViewModel DisplayViewModel;
     public IDialogService DialogOpener;
@@ -62,7 +60,6 @@ public partial class ControlFightsViewModel: ViewModelBase
 
             t.Tables.ForEach(table => RemainingTables.Add(table));
             t.Brackets.ForEach(bracket => RemainingCategories.Add(bracket));
-
         }
 
     public ControlFightsViewModel(
@@ -83,9 +80,37 @@ public partial class ControlFightsViewModel: ViewModelBase
         GoBack.Invoke();
     }
 
-    private void StartCategory(int table,Bracket b){
+    [RelayCommand(CanExecute=(nameof(CanExecuteStartNewCategory)))]
+    public async Task StartNewCategory(){
+        StartCategoryDialogViewModel dialog = new StartCategoryDialogViewModel(){
+            Title="Starting category",
+            Message="Select which category on which table",
+            TableOptions = new List<int>(RemainingTables),
+            BracketOptions = new List<Bracket>(RemainingCategories),
+        };
+
+        DialogOpener.OpenNewDialogWindow(dialog);
+        await dialog.AwaitResolution();
+        if(!dialog.Confirmed) return;
+
+        AddToStarted(dialog.SelectedTable??0,dialog.SelectedBracket);
+        RemainingTables.Remove(dialog.SelectedTable??100);
+        RemainingCategories.Remove(dialog.SelectedBracket);
+        StartedCategory newCategory = new StartedCategory(dialog.SelectedTable??100,dialog.SelectedBracket);
+        StartedCategories.Add(newCategory);
+        SelectedCategory=newCategory;
+
+        newCategory.Bracket.GenerateMatches();
+        Console.WriteLine(newCategory.Bracket.ToTreeString());
+
+    }
+
+
+    private void AddToStarted(int table,Bracket b){
         RemainingTables.Remove(table);
         RemainingCategories.Remove(b);
-        StartedCategories.Add(new StartedCategory(table,b));
+        StartedCategory newCategory = new StartedCategory(table,b);
+        StartedCategories.Add(newCategory);
+        SelectedCategory=newCategory;
     }
 }

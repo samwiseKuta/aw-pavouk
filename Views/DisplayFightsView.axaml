@@ -10,21 +10,21 @@
     x:DataType="vm:DisplayFightsViewModel"
     Title="{Binding SelectedTournament.Name}">
     <Grid RowDefinitions="auto,*">
-        <TextBlock  Grid.Row="0" Background="Red" Text="Fuck the government"/>
         <TextBlock  Grid.Row="0" Text="{Binding SelectedTournament.Name}"/>
-        <StackPanel Margin="20">
-            <ItemsControl ItemsSource="{Binding SelectedTournament.Brackets}" >
+        <StackPanel Grid.Row="1" Margin="20">
+            <ItemsControl ItemsSource="{Binding DisplayBrackets}" >
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel Background="Red" />
+                        <WrapPanel Background="Orange" 
+                            />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid RowDefinitions="auto,*,auto">
+                        <Grid RowDefinitions="auto,*,auto" Margin="40" Width="400">
                             <StackPanel Grid.Row="0" Orientation="Vertical">
-                                <TextBlock Text="Placeholder for table"/>
-                                <TextBlock Text="{Binding Name}"/>
+                                <TextBlock Text="{Binding Table}"/>
+                                <TextBlock Text="{Binding Bracket.Name}"/>
                             </StackPanel>
                             <Grid Grid.Row="1" ColumnDefinitions="*,auto,*">
                                 <StackPanel Grid.Column="0">
@@ -39,7 +39,7 @@
                             </Grid>
                             <Grid Grid.Row="2" ColumnDefinitions="*,auto,*">
 
-            <ItemsControl ItemsSource="{Binding Competitors}" >
+            <ItemsControl ItemsSource="{Binding Bracket.Competitors}" >
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                                             <StackPanel Orientation="Vertical"/>
@@ -50,12 +50,12 @@
                         <Grid ColumnDefinitions="auto,*,auto">
                             <StackPanel Grid.Row="0" Orientation="Horizontal">
                                                     <Rectangle />
-                                <TextBlock Text="Placeholder name"/>
+                                                    <TextBlock Text="{Binding Name}"/>
                             </StackPanel>
                             <Label Grid.Column="1" Content="vs"/>
                             <StackPanel Grid.Row="0" Orientation="Horizontal">
                                                     <Rectangle />
-                                <TextBlock Text="Placeholder name"/>
+                                                    <TextBlock Text="{Binding Name}"/>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>

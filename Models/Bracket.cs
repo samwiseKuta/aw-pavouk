@@ -7,7 +7,7 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
 {
 
 
-    private Node? root;
+    public Node? Root;
     public string Name {get;set;}
     public string Elimination {get;set;}
     public int Depth {get;set;}
@@ -16,56 +16,75 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
         SingleElimination,
         DoubleElimination
     }
-
-    public static Dictionary<string,string> EnumToString;
     public List<Competitor> Competitors{get;set;}
     public class Node
     {
-        public Competitor Competitor;
+        public Competitor? CompetitorOne;
+        public Competitor? CompetitorTwo;
         public Node? Left {get;set;}
         public Node? Right {get;set;}
 
-        public Node(Competitor competitor){
-            this.Competitor = competitor;
-
-        }
-
         public override string? ToString()
         {
-            return this.Competitor.ToString();
+            return $"{this.CompetitorOne?.ToString() ?? "---"} VS {this.CompetitorTwo?.ToString()??"---"}";
         }
     }
 
 
-    public Bracket(){
+    public void GenerateMatches(){
 
+        List<Competitor> compCopy = new List<Competitor>(Competitors);
+
+        for(int i = 1; i < Competitors.Count; i++){
+            Competitor? compOne = PickCompetitor(compCopy);
+            Competitor? compTwo = PickCompetitor(compCopy);
+
+            this.AddLeaf(new Node(){
+                    CompetitorOne = compOne,
+                    CompetitorTwo = compTwo
+                    });
+        }
     }
 
-    public Bracket GenerateEmpty(int participantsCount) {
+
+    private Competitor? PickCompetitor(List<Competitor> pickingFrom){
+        if(pickingFrom.Count == 0) return null;
+        Random rng = new Random();
+        int i = rng.Next(pickingFrom.Count);
+        Console.WriteLine("Picking from size:");
+        Console.WriteLine(pickingFrom.Count);
+        Console.WriteLine("Index:");
+        Console.WriteLine(i);
+        Competitor competitor = pickingFrom[i];
+        pickingFrom.RemoveAt(i);
+        return competitor;
+    }
+
+    public void GenerateEmptyBracket(int participantsCount) {
 
         for(int i = 1; i < participantsCount; i++){
-            this.AddLeaf(new Node(new Competitor()));
+            this.AddLeaf(new Node());
         }
-
-        return this;
     }
 
-    public Bracket GenerateEmpty(List<string> participants){
+    public void GenerateEmptyBracket(){
 
-        return this;
+        for(int i = 1; i < this.Competitors.Count; i++){
+            this.AddLeaf(new Node());
+        }
     }
 
 
     public void AddLeaf(Node leafNode){
 
-        if(this.root is null) {
-            this.root = leafNode;
+        if(this.Root is null) {
+            this.Root = leafNode;
             this.NodeCount = 1;
             this.Depth = 0;
             return;
         }
         Queue<Node> queue = new Queue<Node>();
-        queue.Enqueue(this.root);
+        queue.Enqueue(this.Root);
         
         while(true){
             Node curr = queue.Dequeue();
@@ -85,12 +104,9 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
         }
     }
 
-    public override string? ToString()
-    {
-
-        return this.Name + "";
+    public string ToTreeString(){
         Queue<Node> queue = new Queue<Node>();
-        queue.Enqueue(this.root!);
+        queue.Enqueue(this.Root!);
         List<List<Node>> levels = new List<List<Node>>();
         int depth = 0;
         while(true){
@@ -112,12 +128,17 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
 
         foreach(List<Node> level in levels){
             foreach(Node node in level){
-                value += "| "+node.ToString();
+                value += ""+node.ToString();
             }
-            value+=" |\n";
+            value+=" \n\n";
         }
 
         return value;
+    }
+
+    public override string? ToString()
+    {
+        return $"{this.Name}";
     }
 
 
@@ -130,7 +151,7 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
 
     public override bool Equals(object? obj)
     {
-        return this.GetHashCode() == obj.GetHashCode();
+        return this.GetHashCode() == obj?.GetHashCode();
     }
 
     public override int GetHashCode()
@@ -140,6 +161,6 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
 
     public bool Equals(Bracket? other)
     {
-        return GetHashCode() == other.GetHashCode();
+        return GetHashCode() == other?.GetHashCode();
     }
 }
