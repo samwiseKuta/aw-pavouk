@@ -28,43 +28,42 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
         {
             return $"{this.CompetitorOne?.ToString() ?? "---"} VS {this.CompetitorTwo?.ToString()??"---"}";
         }
+
+        public bool IsPopulated(){
+            return CompetitorOne is not null || CompetitorTwo is not null;
+        }
+        public bool IsFull(){
+            return CompetitorOne is not null && CompetitorTwo is not null;
+        }
+
+        public bool IsLeaf(){
+            return (Left is null && Right is null);
+        }
     }
 
 
     public void GenerateMatches(){
 
         List<Competitor> compCopy = new List<Competitor>(Competitors);
+        this.GenerateEmptyBracket();
 
-        for(int i = 1; i < Competitors.Count; i++){
-            Competitor? compOne = PickCompetitor(compCopy);
-            Competitor? compTwo = PickCompetitor(compCopy);
-
-            this.AddLeaf(new Node(){
-                    CompetitorOne = compOne,
-                    CompetitorTwo = compTwo
-                    });
+        for(int i = 0; i < compCopy.Count; i++){
+            Console.WriteLine("Remaining competitors:");
+            Competitor? compOne = RemoveCompetitor(compCopy);
+            Competitor? compTwo = RemoveCompetitor(compCopy);
+            Console.WriteLine(compCopy.Count);
+            PopulateLeaf(compOne,compTwo);
         }
     }
 
 
-    private Competitor? PickCompetitor(List<Competitor> pickingFrom){
+    private Competitor? RemoveCompetitor(List<Competitor> pickingFrom){
         if(pickingFrom.Count == 0) return null;
         Random rng = new Random();
         int i = rng.Next(pickingFrom.Count);
-        Console.WriteLine("Picking from size:");
-        Console.WriteLine(pickingFrom.Count);
-        Console.WriteLine("Index:");
-        Console.WriteLine(i);
         Competitor competitor = pickingFrom[i];
         pickingFrom.RemoveAt(i);
         return competitor;
-    }
-
-    public void GenerateEmptyBracket(int participantsCount) {
-
-        for(int i = 1; i < participantsCount; i++){
-            this.AddLeaf(new Node());
-        }
     }
 
     public void GenerateEmptyBracket(){
@@ -74,6 +73,40 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
         }
     }
 
+    public void PopulateLeaf(Competitor? compOne, Competitor? compTwo){
+        Node? leaf = FindDeepestUnpopulatedNode();
+        if(leaf is null) throw new Exception("No unpopulated leaf found");
+        leaf.CompetitorOne = compOne;
+        leaf.CompetitorTwo = compTwo;
+    }
+
+    public Node? FindDeepestUnpopulatedNode(){
+
+        if(this.Root is null) return null;
+
+        Queue<Node> queue = new Queue<Node>();
+
+        queue.Enqueue(this.Root);
+
+        Node? curr = null;
+        Node? deepest = null;
+        
+        while(queue.Count > 0){
+            curr = queue.Dequeue();
+
+            if(curr is null) continue;
+
+            if(curr.IsPopulated()){
+                continue;
+            }
+            if(curr.Left is not null) queue.Enqueue(curr.Left);
+            if(curr.Right is not null) queue.Enqueue(curr.Right);
+
+            deepest = curr;
+        }
+        return deepest;
+
+    }
 
     public void AddLeaf(Node leafNode){
 
@@ -91,19 +124,53 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
             if(curr.Left is null){
 
                 curr.Left = leafNode;
-                return;
+                break;
             }
 
             if(curr.Right is null){
                 curr.Right = leafNode;
-                return;
+                break;
             }
 
             queue.Enqueue(curr.Left);
             queue.Enqueue(curr.Right);
         }
+
+        NodeCount++;
     }
 
+    public string ToTreeNumberString(){
+        Queue<Node> queue = new Queue<Node>();
+        queue.Enqueue(this.Root!);
+        List<List<Node>> levels = new List<List<Node>>();
+        int depth = 0;
+        while(true){
+            if(queue.Count == 0) break;
+
+            levels.Add(new List<Node>());
+            int currentDepthCount = queue.Count;
+            for(int i = 0; i < currentDepthCount; i++){
+                Node curr = queue.Dequeue();
+                levels[depth].Add(curr);
+                if(curr.Left is not null) queue.Enqueue(curr.Left);
+                if(curr.Right is not null) queue.Enqueue(curr.Right);
+            }
+            depth++;
+            
+        }
+
+        string value = "";
+
+        foreach(List<Node> level in levels){
+            value+=level.Count;
+            //foreach(Node node in level){
+            //    value += "  "+node.ToString();
+            //}
+            value+=" \n\n";
+        }
+
+        return value;
+    }
     public string ToTreeString(){
         Queue<Node> queue = new Queue<Node>();
         queue.Enqueue(this.Root!);
@@ -128,7 +195,7 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
 
         foreach(List<Node> level in levels){
             foreach(Node node in level){
-                value += ""+node.ToString();
+                value += "  "+node.ToString();
             }
             value+=" \n\n";
         }

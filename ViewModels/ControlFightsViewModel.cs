@@ -93,7 +93,6 @@ public partial class ControlFightsViewModel: ViewModelBase
         await dialog.AwaitResolution();
         if(!dialog.Confirmed) return;
 
-        AddToStarted(dialog.SelectedTable??0,dialog.SelectedBracket);
         RemainingTables.Remove(dialog.SelectedTable??100);
         RemainingCategories.Remove(dialog.SelectedBracket);
         StartedCategory newCategory = new StartedCategory(dialog.SelectedTable??100,dialog.SelectedBracket);
@@ -102,15 +101,8 @@ public partial class ControlFightsViewModel: ViewModelBase
 
         newCategory.Bracket.GenerateMatches();
         Console.WriteLine(newCategory.Bracket.ToTreeString());
-
+        Console.WriteLine(newCategory.Bracket.ToTreeNumberString());
+        Console.WriteLine(newCategory.Bracket.NodeCount);
     }
 
-
-    private void AddToStarted(int table,Bracket b){
-        RemainingTables.Remove(table);
-        RemainingCategories.Remove(b);
-        StartedCategory newCategory = new StartedCategory(table,b);
-        StartedCategories.Add(newCategory);
-        SelectedCategory=newCategory;
-    }
 }
