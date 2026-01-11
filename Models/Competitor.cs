@@ -33,6 +33,6 @@ public class Competitor : IEquatable<Competitor>,IComparable<Competitor>
 
     public override string? ToString()
     {
-        return $"| {Name} {Weight}kg {Origin} |";
+        return $" {Name} {Weight}kg {Origin} ";
     }
 }

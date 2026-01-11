@@ -99,10 +99,9 @@ public partial class ControlFightsViewModel: ViewModelBase
         StartedCategories.Add(newCategory);
         SelectedCategory=newCategory;
 
-        newCategory.Bracket.GenerateMatches();
+        newCategory.Bracket.GenerateMatchesTest();
         Console.WriteLine(newCategory.Bracket.ToTreeString());
         Console.WriteLine(newCategory.Bracket.ToTreeNumberString());
-        Console.WriteLine(newCategory.Bracket.NodeCount);
     }
 
 }

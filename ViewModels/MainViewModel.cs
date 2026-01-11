@@ -67,7 +67,7 @@ public partial class MainViewModel: ViewModelBase, IDialogHost
     private void OnBeginTournament(Tournament t){
         ControlFightsView.SelectedTournament = t;
         DisplayFightsView.SelectedTournament = t;
-        WindowService.OpenNewWindow(DisplayFightsView);
+        //WindowService.OpenNewWindow(DisplayFightsView);
         GoToFights();
     }
 

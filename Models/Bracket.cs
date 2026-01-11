@@ -19,6 +19,7 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
     public List<Competitor> Competitors{get;set;}
     public class Node
     {
+        public int? Id {get;set;}
         public Competitor? CompetitorOne;
         public Competitor? CompetitorTwo;
         public Node? Left {get;set;}
@@ -26,7 +27,7 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
 
         public override string? ToString()
         {
-            return $"{this.CompetitorOne?.ToString() ?? "---"} VS {this.CompetitorTwo?.ToString()??"---"}";
+            return $"{this.CompetitorOne?.ToString() ?? "---"} |VS| {this.CompetitorTwo?.ToString()??"---"}";
         }
 
         public bool IsPopulated(){
@@ -41,23 +42,7 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
         }
     }
 
-
-    public void GenerateMatches(){
-
-        List<Competitor> compCopy = new List<Competitor>(Competitors);
-        this.GenerateEmptyBracket();
-
-        for(int i = 0; i < compCopy.Count; i++){
-            Console.WriteLine("Remaining competitors:");
-            Competitor? compOne = RemoveCompetitor(compCopy);
-            Competitor? compTwo = RemoveCompetitor(compCopy);
-            Console.WriteLine(compCopy.Count);
-            PopulateLeaf(compOne,compTwo);
-        }
-    }
-
-
-    private Competitor? RemoveCompetitor(List<Competitor> pickingFrom){
+    private Competitor? RemoveRandomCompetitor(List<Competitor> pickingFrom){
         if(pickingFrom.Count == 0) return null;
         Random rng = new Random();
         int i = rng.Next(pickingFrom.Count);
@@ -66,78 +51,46 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
         return competitor;
     }
 
-    public void GenerateEmptyBracket(){
-
-        for(int i = 1; i < this.Competitors.Count; i++){
-            this.AddLeaf(new Node());
+    public void GenerateMatchesTest(){
+        List<Competitor> compCopy = new (Competitors);
+        Console.WriteLine("Competitors:");
+        Console.WriteLine(compCopy.Count);
+        Queue<Node> unlinkedQ = new();
+        Node root = new Node(){Id=0};
+        this.Root = root;
+        unlinkedQ.Enqueue(root);
+        int requiredNodes = (compCopy.Count-1);
+        int i = 1;
+        while(i<requiredNodes-1){
+            Node curr = unlinkedQ.Dequeue();
+            if(i < requiredNodes){
+                curr.Left = new Node(){Id=i};
+                unlinkedQ.Enqueue(curr.Left);
+                i++;
+            }
+            if(i < requiredNodes){
+                curr.Right= new Node(){Id=i};
+                unlinkedQ.Enqueue(curr.Right);
+                i++;
+            }
         }
-    }
-
-    public void PopulateLeaf(Competitor? compOne, Competitor? compTwo){
-        Node? leaf = FindDeepestUnpopulatedNode();
-        if(leaf is null) throw new Exception("No unpopulated leaf found");
-        leaf.CompetitorOne = compOne;
-        leaf.CompetitorTwo = compTwo;
-    }
-
-    public Node? FindDeepestUnpopulatedNode(){
-
-        if(this.Root is null) return null;
-
-        Queue<Node> queue = new Queue<Node>();
-
-        queue.Enqueue(this.Root);
-
-        Node? curr = null;
-        Node? deepest = null;
         
-        while(queue.Count > 0){
-            curr = queue.Dequeue();
+        //while(unlinkedQ.Count > 1){
+        //    Console.WriteLine("Remaining in queue:");
+        //    Console.WriteLine(unlinkedQ.Count);
+        //    Node node = new();
+        //    node.Right = unlinkedQ.Dequeue();
+        //    node.Left = unlinkedQ.Dequeue();
+        //    unlinkedQ.Enqueue(node);
+        //    NodeCount++;
+        //}
 
-            if(curr is null) continue;
-
-            if(curr.IsPopulated()){
-                continue;
-            }
-            if(curr.Left is not null) queue.Enqueue(curr.Left);
-            if(curr.Right is not null) queue.Enqueue(curr.Right);
-
-            deepest = curr;
-        }
-        return deepest;
-
+        //if(unlinkedQ.Count == 1){
+        //    Root=unlinkedQ.Dequeue();;
+        //}else{
+        //}
     }
 
-    public void AddLeaf(Node leafNode){
-
-        if(this.Root is null) {
-            this.Root = leafNode;
-            this.NodeCount = 1;
-            this.Depth = 0;
-            return;
-        }
-        Queue<Node> queue = new Queue<Node>();
-        queue.Enqueue(this.Root);
-        
-        while(true){
-            Node curr = queue.Dequeue();
-            if(curr.Left is null){
-
-                curr.Left = leafNode;
-                break;
-            }
-
-            if(curr.Right is null){
-                curr.Right = leafNode;
-                break;
-            }
-
-            queue.Enqueue(curr.Left);
-            queue.Enqueue(curr.Right);
-        }
-
-        NodeCount++;
-    }
 
     public string ToTreeNumberString(){
         Queue<Node> queue = new Queue<Node>();
