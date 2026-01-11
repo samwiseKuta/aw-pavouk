@@ -25,6 +25,10 @@ public partial class ControlFightsViewModel: ViewModelBase
     [ObservableProperty]
     private int _selectedStartedTable;
 
+
+    [ObservableProperty]
+    private string _temporaryTree;
+
     [NotifyCanExecuteChangedFor(nameof(StartNewCategoryCommand))]
     [NotifyPropertyChangedFor(nameof(CanExecuteStartNewCategory))]
     [ObservableProperty]
@@ -102,6 +106,7 @@ public partial class ControlFightsViewModel: ViewModelBase
         newCategory.Bracket.GenerateMatchesTest();
         Console.WriteLine(newCategory.Bracket.ToTreeString());
         Console.WriteLine(newCategory.Bracket.ToTreeNumberString());
+        TemporaryTree=newCategory.Bracket.ToTreeString();
     }
 
 }

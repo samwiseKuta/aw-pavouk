@@ -108,7 +108,7 @@
                 </StackPanel>
                 <TextBlock  Text="{Binding SelectedCategory.Bracket.Name}"/>
             </StackPanel>
-            <Rectangle Grid.Row="1" />
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding TemporaryTree}"/>
         </Grid>
     </Grid>
 </UserControl>

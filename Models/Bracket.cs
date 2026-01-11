@@ -22,6 +22,7 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
         public int? Id {get;set;}
         public Competitor? CompetitorOne;
         public Competitor? CompetitorTwo;
+        public Node? Up {get;set;}
         public Node? Left {get;set;}
         public Node? Right {get;set;}
 
@@ -51,44 +52,88 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
         return competitor;
     }
 
+
+
     public void GenerateMatchesTest(){
-        List<Competitor> compCopy = new (Competitors);
-        Console.WriteLine("Competitors:");
-        Console.WriteLine(compCopy.Count);
+        GenerateEmptyBracket();
+        RandomlyPopulateBracket();
+
+    }
+
+
+    public void RandomlyPopulateBracket(){
+        int maxDepth = GetMaxDepth();
+
+        var queue = new Queue<Node>();
+        queue.Enqueue(Root);
+
+        int currentDepth = 0;
+
+        List<Competitor> compCopy = new(Competitors);
+
+        while (queue.Count > 0)
+        {
+            int levelCount = queue.Count;
+            currentDepth++;
+
+            Console.WriteLine("Current level count:");
+            Console.WriteLine(levelCount);
+
+            if(currentDepth == maxDepth-1){
+                while(queue.Count > 0){
+                    Node curr = queue.Dequeue();
+                    if(curr.Left is not null){
+                        curr.Left.CompetitorOne=RemoveRandomCompetitor(compCopy);
+                        curr.Left.CompetitorTwo=RemoveRandomCompetitor(compCopy);
+                    }
+                    if(curr.Right is not null){
+                        curr.Right.CompetitorOne=RemoveRandomCompetitor(compCopy);
+                        curr.Right.CompetitorTwo=RemoveRandomCompetitor(compCopy);
+                    }
+
+                    if(curr.Right is null || curr.Left is null){
+                        curr.CompetitorOne = RemoveRandomCompetitor(compCopy);
+                    }
+                }
+                Console.WriteLine("Leftovers:");
+                Console.WriteLine(compCopy.Count);
+                return;
+            }
+
+            
+            for (int i = 0; i < levelCount; i++)
+            {
+                var node = queue.Dequeue();
+
+                if (node.Left != null)
+                    queue.Enqueue(node.Left);
+                if (node.Right != null)
+                    queue.Enqueue(node.Right);
+            }
+        }
+
+    }
+
+    public void GenerateEmptyBracket(){
         Queue<Node> unlinkedQ = new();
         Node root = new Node(){Id=0};
         this.Root = root;
         unlinkedQ.Enqueue(root);
-        int requiredNodes = (compCopy.Count-1);
+        int requiredNodes = (Competitors.Count-1);
         int i = 1;
-        while(i<requiredNodes-1){
+        while(i<requiredNodes){
             Node curr = unlinkedQ.Dequeue();
             if(i < requiredNodes){
-                curr.Left = new Node(){Id=i};
+                curr.Left = new Node(){Id=i,Up=curr};
                 unlinkedQ.Enqueue(curr.Left);
                 i++;
             }
             if(i < requiredNodes){
-                curr.Right= new Node(){Id=i};
+                curr.Right= new Node(){Id=i,Up=curr};
                 unlinkedQ.Enqueue(curr.Right);
                 i++;
             }
         }
-        
-        //while(unlinkedQ.Count > 1){
-        //    Console.WriteLine("Remaining in queue:");
-        //    Console.WriteLine(unlinkedQ.Count);
-        //    Node node = new();
-        //    node.Right = unlinkedQ.Dequeue();
-        //    node.Left = unlinkedQ.Dequeue();
-        //    unlinkedQ.Enqueue(node);
-        //    NodeCount++;
-        //}
-
-        //if(unlinkedQ.Count == 1){
-        //    Root=unlinkedQ.Dequeue();;
-        //}else{
-        //}
     }
 
 
@@ -155,6 +200,36 @@ public class Bracket : IComparable<Bracket>, IEquatable<Bracket>
 
         return value;
     }
+
+
+int GetMaxDepth()
+{
+    if (this.Root == null)
+        return 0;
+
+    var queue = new Queue<Node>();
+    queue.Enqueue(Root);
+
+    int height = 0;
+
+    while (queue.Count > 0)
+    {
+        int levelCount = queue.Count;
+        height++;
+
+        for (int i = 0; i < levelCount; i++)
+        {
+            var node = queue.Dequeue();
+
+            if (node.Left != null)
+                queue.Enqueue(node.Left);
+            if (node.Right != null)
+                queue.Enqueue(node.Right);
+        }
+    }
+
+    return height;
+}
 
     public override string? ToString()
     {
