@@ -1,4 +1,7 @@
-My project can be found on my [Github](https://github.com/samwiseKuta/aw-pavouk).
+# AW-Spider
+App for creating and running armwrestling tournaments.
+Manage your tournament with easy-to-use controls and neat visual representation.
+
 
 Install Instructions:
 1) Either download zip from github or clone the repo

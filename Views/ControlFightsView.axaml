@@ -52,7 +52,11 @@
                         </StackPanel>
                     </Border>
                 </Button>
-                <ListBox Grid.Row="2"
+            <StackPanel
+                Grid.Row="2"
+                >
+                <Label Content="Remaining Tables:"/>
+                <ListBox 
                     ItemsSource="{Binding RemainingTables}"
                     SelectedItem=""
                     ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -66,11 +70,16 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                        <TextBlock Text="{Binding}"/>
+                            <TextBlock Text="{Binding}"/>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <ListBox Grid.Row="3"
+            </StackPanel>
+            <StackPanel
+                Grid.Row="3"
+                >
+                <Label Content="Remaining Categories:"/>
+                <ListBox 
                     ItemsSource="{Binding RemainingCategories}"
                     SelectedItem=""
                     ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -84,10 +93,12 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                        <TextBlock Text="{Binding Name}"/>
+                            <TextBlock Text="{Binding Name}"/>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+
+            </StackPanel>
             <Button 
                 Grid.Row="4"
                 Command="{Binding BackCommand}"
